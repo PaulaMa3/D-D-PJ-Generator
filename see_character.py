@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+import numpy as np
 from PIL import Image, ImageTk
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import tkinter as tk
@@ -50,7 +51,8 @@ class SeeCharacter(ttk.Frame):
         button_frame = ttk.Frame(self.central_frame, style='Custom.TFrame')
         button_frame.grid(row=2, column=2, padx=5, pady=(0, 5), sticky="ne")
 
-        self.search_button = ttk.Button(button_frame, text="Buscar", command=self.search_character, style='Light.TButton')
+        self.search_button = ttk.Button(button_frame, text="Buscar", command=self.search_character,
+                                        style='Light.TButton')
         self.search_button.grid(row=0, column=0, padx=5)
 
         self.delete_button = ttk.Button(button_frame, text="Eliminar", command=self.del_character, style='Dark.TButton')
@@ -66,8 +68,8 @@ class SeeCharacter(ttk.Frame):
 
         # Inicializar la tabla donde se mostrarán los resultados
         self.tabla = ttk.Treeview(self.central_frame, columns=(
-        "Name", "Race", "Class", "Background", "Strength", "Dexterity", "Constitution", "Intelligence", "Wisdom", "Charisma",
-        "Speed"), show='headings')
+            "Name", "Race", "Class", "Background", "Strength", "Dexterity", "Constitution", "Intelligence",
+            "Wisdom", "Charisma", "Speed"), show='headings')
 
         self.tabla.heading("Name", text="Nombre")
         self.tabla.heading("Race", text="Raza")
@@ -114,15 +116,15 @@ class SeeCharacter(ttk.Frame):
 
         # Añadir un canvas para la imagen
         self.canvas = tk.Canvas(self.data_frame, width=150, height=150)
-        self.canvas.grid(row=0, column=0, rowspan=3, padx=20, pady=15, sticky="nw")
+        self.canvas.grid(row=0, column=0, rowspan=3, padx=20, pady=20, sticky="nw")
 
         # Añadir labels para mostrar el nombre y otros detalles
         self.label_name = ttk.Label(self.data_frame, text="", font=("Garamond", 16), style='Custom.TLabelframe.Label')
-        self.label_name.grid(row=3, column=0, padx=5, pady=5, sticky="nw")
+        self.label_name.grid(row=3, column=0, padx=20, pady=20, sticky="ew")
 
         # Frame para la gráfica
         self.chart_frame = ttk.Frame(self.info_frame)
-        self.chart_frame.grid(row=0, column=1, padx=5, pady=(15, 5), sticky="nsew")
+        self.chart_frame.grid(row=0, column=1, padx=(0, 20), pady=(15, 5), sticky="nsew")
 
         # Asegurarse de que el frame se expanda
         self.info_frame.columnconfigure(1, weight=1)
@@ -142,9 +144,9 @@ class SeeCharacter(ttk.Frame):
 
         query = '''SELECT DISTINCT characters.name, 
                             characters.image_path, 
-                            characters.race_id AS race, 
-                            characters.class_id AS class,  
-                            characters.background_id AS background,
+                            races.name AS race_name, 
+                            classes.name AS class_name,  
+                            backgrounds.name AS background_name,
                             COALESCE(attr_str.value, 0) AS strength, 
                             COALESCE(attr_dex.value, 0) AS dexterity, 
                             COALESCE(attr_con.value, 0) AS constitution, 
@@ -175,7 +177,6 @@ class SeeCharacter(ttk.Frame):
                   ON characters.id = attr_cha.character_id AND attr_cha.attribute_id = 
                      (SELECT id FROM attributes WHERE name = 'Carisma')
                ORDER BY characters.name DESC'''
-
 
         registros_db = self.db_consulta(query)
 
@@ -238,21 +239,44 @@ class SeeCharacter(ttk.Frame):
         self.show_attribute_chart([strength, dexterity, constitution, intelligence, wisdom, charisma])
 
     def show_attribute_chart(self, attributes):
-        # Limpiar cualquier gráfica anterior
+        # Limpiar cualquier gráfica anterior antes de crear una nueva
         for widget in self.chart_frame.winfo_children():
             widget.destroy()
 
-        labels = ['Fuerza', 'Dest.', 'Const.', 'Intel.', 'Sabiduría', 'Carisma']
+        # Nombres de los atributos
+        labels = ['Fuerza', 'Destreza', 'Constitución', 'Inteligencia', 'Sabiduría', 'Carisma']
 
-        # Ajustar el tamaño de la figura
-        fig, ax = plt.subplots(figsize=(4, 3))  # Puedes ajustar estos valores para hacer la gráfica más pequeña
+        # Número de variables
+        num_vars = len(labels)
 
-        ax.plot(labels, attributes, marker='o', linestyle='-', color='#7c6a0a')
+        # Ángulo de cada eje del gráfico de radar
+        angles = np.linspace(0, 2 * np.pi, num_vars, endpoint=False).tolist()
 
-        # Asegurarse de que la gráfica se ajuste al contenedor
+        # Completar el ciclo para cerrar el gráfico
+        attributes += attributes[:1]
+        angles += angles[:1]
+
+        # Iniciar el gráfico de radar con un tamaño ajustado
+        fig, ax = plt.subplots(figsize=(3, 3), subplot_kw=dict(polar=True))
+
+        # Dibujar la línea del gráfico con un tono verde suave
+        ax.plot(angles, attributes, color='#A7C957', linewidth=2)
+
+        # Rellenar el gráfico con un verde transparente
+        ax.fill(angles, attributes, color=(167/255, 201/255, 87/255, 0.4), alpha=0.4)
+
+        # Ajustar el color de los ejes y las etiquetas a un marrón suave
+        ax.set_xticks(angles[:-1])
+        ax.set_xticklabels(labels, color='#6C584C')
+
+        # Ajustar el color del borde y las líneas de la gráfica
+        ax.spines['polar'].set_color('#6C584C')
+        ax.spines['polar'].set_linewidth(1)
+
+        # Ajustar el layout para que encaje mejor en el frame
         fig.tight_layout()
 
-        # Mostrar gráfica en Tkinter
+        # Mostrar la gráfica en el frame de Tkinter
         canvas = FigureCanvasTkAgg(fig, master=self.chart_frame)
         canvas.draw()
         canvas.get_tk_widget().pack(fill=tk.BOTH, expand=True)
@@ -265,48 +289,47 @@ class SeeCharacter(ttk.Frame):
 
         search_term = self.search_entry.get()
         if search_term:  # Si hay un término de búsqueda
-            query = '''SELECT characters.name, characters.race_id AS race, characters.class_id AS class, characters.background_id AS background, 
-                    COALESCE(attr_str.value, 0) AS strength, COALESCE(attr_dex.value, 0) AS dexterity, COALESCE(attr_con.value, 0) AS constitution, 
-                    COALESCE(attr_int.value, 0) AS intelligence, COALESCE(attr_wis.value, 0) AS wisdom, COALESCE(attr_cha.value, 0) AS charisma, 
-                    races.speed AS speed
-                    
-                    FROM characters
-                    LEFT JOIN races ON characters.race_id = races.id
-                    LEFT JOIN classes ON characters.class_id = classes.id
-                    LEFT JOIN backgrounds ON characters.background_id = backgrounds.id  
-                    LEFT JOIN attribute_character_association AS attr_str ON characters.id = attr_str.character_id AND attr_str.attribute_id = (SELECT id FROM attributes WHERE name = 'Fuerza')
-                    LEFT JOIN attribute_character_association AS attr_dex ON characters.id = attr_dex.character_id AND attr_dex.attribute_id = (SELECT id FROM attributes WHERE name = 'Destreza')
-                    LEFT JOIN attribute_character_association AS attr_con ON characters.id = attr_con.character_id AND attr_con.attribute_id = (SELECT id FROM attributes WHERE name = 'Constitución')
-                    LEFT JOIN attribute_character_association AS attr_int ON characters.id = attr_int.character_id AND attr_int.attribute_id = (SELECT id FROM attributes WHERE name = 'Inteligencia')
-                    LEFT JOIN attribute_character_association AS attr_wis ON characters.id = attr_wis.character_id AND attr_wis.attribute_id = (SELECT id FROM attributes WHERE name = 'Sabiduría')
-                    LEFT JOIN attribute_character_association AS attr_cha ON characters.id = attr_cha.character_id AND attr_cha.attribute_id = (SELECT id FROM attributes WHERE name = 'Carisma')
-                    WHERE characters.name LIKE ?
-                    ORDER BY characters.name DESC'''
+            query = '''SELECT characters.name, races.name AS race_name, classes.name AS class_name, backgrounds.name AS background_name, 
+                        COALESCE(attr_str.value, 0) AS strength, COALESCE(attr_dex.value, 0) AS dexterity, COALESCE(attr_con.value, 0) AS constitution, 
+                        COALESCE(attr_int.value, 0) AS intelligence, COALESCE(attr_wis.value, 0) AS wisdom, COALESCE(attr_cha.value, 0) AS charisma, 
+                        races.speed AS speed
+                        FROM characters
+                        LEFT JOIN races ON characters.race_id = races.id
+                        LEFT JOIN classes ON characters.class_id = classes.id
+                        LEFT JOIN backgrounds ON characters.background_id = backgrounds.id  
+                        LEFT JOIN attribute_character_association AS attr_str ON characters.id = attr_str.character_id AND attr_str.attribute_id = (SELECT id FROM attributes WHERE name = 'Fuerza')
+                        LEFT JOIN attribute_character_association AS attr_dex ON characters.id = attr_dex.character_id AND attr_dex.attribute_id = (SELECT id FROM attributes WHERE name = 'Destreza')
+                        LEFT JOIN attribute_character_association AS attr_con ON characters.id = attr_con.character_id AND attr_con.attribute_id = (SELECT id FROM attributes WHERE name = 'Constitución')
+                        LEFT JOIN attribute_character_association AS attr_int ON characters.id = attr_int.character_id AND attr_int.attribute_id = (SELECT id FROM attributes WHERE name = 'Inteligencia')
+                        LEFT JOIN attribute_character_association AS attr_wis ON characters.id = attr_wis.character_id AND attr_wis.attribute_id = (SELECT id FROM attributes WHERE name = 'Sabiduría')
+                        LEFT JOIN attribute_character_association AS attr_cha ON characters.id = attr_cha.character_id AND attr_cha.attribute_id = (SELECT id FROM attributes WHERE name = 'Carisma')
+                        WHERE characters.name LIKE ?
+                        ORDER BY characters.name DESC'''
             registros_db = self.db_consulta(query, ('%' + search_term + '%',))
         else:
             query = '''SELECT characters.name, races.name AS race_name, classes.name AS class_name, backgrounds.name AS background_name, 
-                    COALESCE(attr_str.value, 0) AS strength, COALESCE(attr_dex.value, 0) AS dexterity, COALESCE(attr_con.value, 0) AS constitution, 
-                    COALESCE(attr_int.value, 0) AS intelligence, COALESCE(attr_wis.value, 0) AS wisdom, COALESCE(attr_cha.value, 0) AS charisma, 
-                    races.speed AS speed
-                    FROM characters
-                    LEFT JOIN races ON characters.race_id = races.id
-                    LEFT JOIN classes ON characters.class_id = classes.id
-                     LEFT JOIN backgrounds ON characters.background_id = backgrounds.id
-                    LEFT JOIN attribute_character_association AS attr_str ON characters.id = attr_str.character_id AND attr_str.attribute_id = (SELECT id FROM attributes WHERE name = 'Fuerza')
-                    LEFT JOIN attribute_character_association AS attr_dex ON characters.id = attr_dex.character_id AND attr_dex.attribute_id = (SELECT id FROM attributes WHERE name = 'Destreza')
-                    LEFT JOIN attribute_character_association AS attr_con ON characters.id = attr_con.character_id AND attr_con.attribute_id = (SELECT id FROM attributes WHERE name = 'Constitución')
-                    LEFT JOIN attribute_character_association AS attr_int ON characters.id = attr_int.character_id AND attr_int.attribute_id = (SELECT id FROM attributes WHERE name = 'Inteligencia')
-                    LEFT JOIN attribute_character_association AS attr_wis ON characters.id = attr_wis.character_id AND attr_wis.attribute_id = (SELECT id FROM attributes WHERE name = 'Sabiduría')
-                    LEFT JOIN attribute_character_association AS attr_cha ON characters.id = attr_cha.character_id AND attr_cha.attribute_id = (SELECT id FROM attributes WHERE name = 'Carisma')
-                    ORDER BY characters.name DESC'''
+                        COALESCE(attr_str.value, 0) AS strength, COALESCE(attr_dex.value, 0) AS dexterity, COALESCE(attr_con.value, 0) AS constitution, 
+                        COALESCE(attr_int.value, 0) AS intelligence, COALESCE(attr_wis.value, 0) AS wisdom, COALESCE(attr_cha.value, 0) AS charisma, 
+                        races.speed AS speed
+                        FROM characters
+                        LEFT JOIN races ON characters.race_id = races.id
+                        LEFT JOIN classes ON characters.class_id = classes.id
+                        LEFT JOIN backgrounds ON characters.background_id = backgrounds.id
+                        LEFT JOIN attribute_character_association AS attr_str ON characters.id = attr_str.character_id AND attr_str.attribute_id = (SELECT id FROM attributes WHERE name = 'Fuerza')
+                        LEFT JOIN attribute_character_association AS attr_dex ON characters.id = attr_dex.character_id AND attr_dex.attribute_id = (SELECT id FROM attributes WHERE name = 'Destreza')
+                        LEFT JOIN attribute_character_association AS attr_con ON characters.id = attr_con.character_id AND attr_con.attribute_id = (SELECT id FROM attributes WHERE name = 'Constitución')
+                        LEFT JOIN attribute_character_association AS attr_int ON characters.id = attr_int.character_id AND attr_int.attribute_id = (SELECT id FROM attributes WHERE name = 'Inteligencia')
+                        LEFT JOIN attribute_character_association AS attr_wis ON characters.id = attr_wis.character_id AND attr_wis.attribute_id = (SELECT id FROM attributes WHERE name = 'Sabiduría')
+                        LEFT JOIN attribute_character_association AS attr_cha ON characters.id = attr_cha.character_id AND attr_cha.attribute_id = (SELECT id FROM attributes WHERE name = 'Carisma')
+                        ORDER BY characters.name DESC'''
             registros_db = self.db_consulta(query)
-
 
         # Limpiar la tabla actual y mostrar los resultados de la búsqueda
         self.tabla.delete(*self.tabla.get_children())
         for fila in registros_db:
             self.tabla.insert('', 'end', values=(
-            fila[0], fila[1], fila[2], fila[3], fila[4], fila[5], fila[6], fila[7], fila[8], fila[9]))
+                fila[0], fila[1], fila[2], fila[3], fila[4], fila[5], fila[6], fila[7], fila[8], fila[9], fila[10]
+            ))
 
     def del_character(self):
         try:
@@ -321,4 +344,5 @@ class SeeCharacter(ttk.Frame):
         self.ok_message['text'] = f'Personaje {nombre} eliminado con éxito'
         self.get_character()
 
-
+    def edit_character(self):
+        pass

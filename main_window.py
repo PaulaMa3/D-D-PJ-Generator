@@ -61,9 +61,9 @@ class MainWindow:
         self.main_frame.columnconfigure(2, weight=1)
 
         # Botón de crear nuevo personaje, editar o ver personajes utilizando ttk.Button
-        self.boton_crear = ttk.Button(self.main_frame, text='Crear personaje', command=self.show_add_character)
+        self.boton_crear = ttk.Button(self.main_frame, text='Crear personaje', command=self.show_add_character, style='Light.TButton')
         self.boton_crear.grid(row=2, column=1, padx=20, pady=(30, 10), sticky=tk.W + tk.E)
-        self.boton_ver = ttk.Button(self.main_frame, text='Lista de personajes', command=self.show_see_character)
+        self.boton_ver = ttk.Button(self.main_frame, text='Lista de personajes', command=self.show_see_character, style='Light.TButton')
         self.boton_ver.grid(row=3, column=1, padx=20, pady=(10, 30), sticky=tk.W + tk.E)
         self.boton_salir = ttk.Button(self.main_frame, text='Salir', command=self.window.quit, style="Dark.TButton")
         self.boton_salir.grid(row=4, column=1, padx=20, pady=(10, 30), sticky=tk.W + tk.E)

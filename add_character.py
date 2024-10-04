@@ -761,13 +761,35 @@ class AddCharacter(ttk.Frame):
             self.generated_image.save(image_path, format='JPEG')
             self.selected_image_path = image_path  # Guardar la ruta para su uso posterior
 
-        # Insertar nuevo personaje en la tabla characters
+        # Obtener el ID de la raza, clase y trasfondo a partir del nombre seleccionado en los comboboxes
+        race_id = self.db_query('SELECT id FROM races WHERE name = ?', (self.combobox_race.get(),)).fetchone()
+        class_id = self.db_query('SELECT id FROM classes WHERE name = ?', (self.combobox_c_class.get(),)).fetchone()
+        background_id = self.db_query('SELECT id FROM backgrounds WHERE name = ?',
+                                      (self.combobox_background.get(),)).fetchone()
+
+        # Verifica si se encontraron los IDs válidos
+        if not race_id:
+            messagebox.showerror("Error", "No se pudo encontrar la raza seleccionada en la base de datos.")
+            return
+        if not class_id:
+            messagebox.showerror("Error", "No se pudo encontrar la clase seleccionada en la base de datos.")
+            return
+        if not background_id:
+            messagebox.showerror("Error", "No se pudo encontrar el trasfondo seleccionado en la base de datos.")
+            return
+
+        # Convertir las tuplas a valores simples
+        race_id = race_id[0]
+        class_id = class_id[0]
+        background_id = background_id[0]
+
+        # Insertar nuevo personaje en la tabla characters usando los IDs
         query = 'INSERT INTO characters (name, race_id, class_id, background_id, image_path) VALUES (?, ?, ?, ?, ?)'
         parametros = (
             self.entry_name.get(),
-            self.combobox_race.get(),
-            self.combobox_c_class.get(),
-            self.combobox_background.get(),
+            race_id,
+            class_id,
+            background_id,
             getattr(self, 'selected_image_path', None)
         )
 
