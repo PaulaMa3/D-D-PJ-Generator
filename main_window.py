@@ -90,7 +90,7 @@ class MainWindow:
         self.add_character_frame.grid()  # Mostrar el frame de AddCharacter
 
         # Establecer un tamaño fijo mayor que se ajuste a todos los elementos de AddCharacter
-        self.window.geometry("1350x1000")  # Establecer el tamaño exacto de la ventana para AddCharacter
+        self.window.geometry("1410x1000")  # Establecer el tamaño exacto de la ventana para AddCharacter
 
         self.center_window()  # Centrar la ventana en la pantalla
 
@@ -99,7 +99,8 @@ class MainWindow:
         self.see_character_frame.grid_remove()  # Ocultar el frame de SeeCharacter
         self.add_character_frame.grid_remove()  # Ocultar el frame de AddCharacter
         self.see_character_frame.grid()
-        self.adjust_window_size()  # Ajustar el tamaño de la ventana
+        self.window.geometry("950x1000")  # Establecer el tamaño exacto de la ventana para AddCharacter
+        self.center_window()  # Centrar la ventana en la pantalla
 
 
     def show_main_window(self):

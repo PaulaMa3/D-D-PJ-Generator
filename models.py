@@ -33,7 +33,6 @@ class Character(Base):
     __tablename__ = "characters"
     id = Column(Integer, primary_key=True)
     name = Column(String(200), nullable=False)
-    level = Column(Integer, nullable=False)
     image_path = Column(String(200), nullable=False)
     race_id = Column(Integer, ForeignKey('races.id'))
     race = relationship('Race', back_populates='characters')
@@ -47,10 +46,9 @@ class Character(Base):
     armors = relationship('Armor', secondary=character_armor_association, back_populates='characters')
     inventories = relationship('Inventory', back_populates='character')
 
-    def __init__(self, name, level, image, race_id, class_id, background_id=None):
+    def __init__(self, name, image_path, race_id, class_id, background_id):
         self.name = name
-        self.level = level
-        self.image = image
+        self.image_path = image_path
         self.race_id = race_id
         self.class_id = class_id
         self.background_id = background_id

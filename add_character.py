@@ -1,3 +1,4 @@
+import random
 import os
 import tkinter as tk
 from tkinter import ttk, filedialog, messagebox
@@ -58,6 +59,10 @@ class AddCharacter(ttk.Frame):
         self.back_button = ttk.Button(barra, text="Volver a Inicio", command=self.main_window.show_main_window, style="Dark.TButton")
         self.back_button.pack(side="left", padx=(10, 0))
 
+        # Añadir botón para crear personaje aleatorio
+        self.random_character_button = ttk.Button(barra, text="Crear Personaje Aleatorio", command=self.generate_random_character, style='Light.TButton')
+        self.random_character_button.pack(side="right", padx=(10, 35))
+
         frame_ep = ttk.LabelFrame(central_frame, text="Generador de fichas de personaje", labelanchor='n', style='Custom.TLabelframe')
         frame_ep.grid(row=2, column=0, columnspan=10, pady=0, padx=(10, 10), sticky=tk.NSEW)
 
@@ -75,6 +80,10 @@ class AddCharacter(ttk.Frame):
         self.label_name.grid(row=2, column=1, padx=(25, 5), pady=(25,5), sticky=tk.NSEW)
         self.entry_name = ttk.Entry(frame_ep, font=("Garamond", 16))
         self.entry_name.grid(row=2, column=2, padx=(5, 20), pady=(25,5), sticky=tk.NSEW)
+
+        self.dado_image = tk.PhotoImage(file="resources/dado.png")
+        self.random_name_button = ttk.Button(frame_ep, image=self.dado_image, command=self.generate_random_name)
+        self.random_name_button.grid(row=2, column=3, padx=(0, 5), pady=(25,5))
 
         self.label_race = ttk.Label(frame_ep, text="Raza:", font=("Garamond", 16), background='#F4F1DE')
         self.label_race.grid(row=3, column=1, padx=(25, 5), pady=5, sticky=tk.NSEW)
@@ -325,6 +334,21 @@ class AddCharacter(ttk.Frame):
         self.bond_info_label = ttk.Label(background_features, text="", font=("Garamond", 12), background='#F4F1DE', wraplength=150)
         self.bond_info_label.grid(row=15, rowspan=3, column=0, padx=30, pady=(5, 30), sticky=tk.NSEW)
 
+    def generate_random_name(self):
+        first_parts = ["Aer", "Al", "Ar", "Eld", "Fen", "Gal", "Lith", "Mel", "Ther", "Val",
+                       "Zar", "Bel", "Ori", "Dru", "Ari", "Sar", "El", "Kael", "Faer", "Nor"]
+
+        second_parts = ["drith", "darin", "gorn", "mir", "nath", "ril", "thas", "wyn", "xar", "zor",
+                        "dor", "mand", "gorn", "mith", "lorn", "dan", "gal", "thir", "ion", "reth"]
+
+        suffixes = ["a", "ion", "on", "el", "is", "or", "eth", "ar", "us", "il",
+                    "an", "or", "yn", "os", "ath", "ius", "iel", "iel", "iel", "ia"]
+
+        # Construye un nombre mágico aleatorio combinando las partes
+        random_name = f"{random.choice(first_parts)}{random.choice(second_parts)}{random.choice(suffixes)}"
+        self.entry_name.delete(0, tk.END)  # Asegúrate de borrar cualquier texto previo
+        self.entry_name.insert(0, random_name)  # Inserta el nombre generado en el Entry
+
     def select_image(self):
         # Abrir cuadro de diálogo para seleccionar archivo
         file_path = filedialog.askopenfilename(filetypes=[("Image files", "*.jpg;*.png")])
@@ -377,6 +401,16 @@ class AddCharacter(ttk.Frame):
             return False
 
         return True
+
+    def generate_valid_attributes(self):
+        while True:
+            # Genera 6 atributos aleatorios entre 8 y 15
+            attributes = [random.randint(8, 15) for _ in range(6)]
+            total_sum = sum(attributes)
+
+            # Verifica que la suma de los atributos sea exactamente 75
+            if total_sum == 75:
+                return attributes
 
     def update_race_bonuses(self, event=None):
         selected_race = self.combobox_race.get()
@@ -644,6 +678,72 @@ class AddCharacter(ttk.Frame):
         self.update_languages()
         self.update_inventory()
 
+    def generate_random_character(self):
+        # Generar un nombre aleatorio
+        self.generate_random_name()
+
+        # Asignar aleatoriamente una raza
+        race_options = list(self.race_bonuses.keys())
+        random_race = random.choice(race_options)
+        self.combobox_race.set(random_race)
+        self.update_race_bonuses()  # Actualizar bonificaciones raciales
+
+        # Asignar aleatoriamente una clase
+        class_options = list(get_classes().keys())
+        random_class = random.choice(class_options)
+        self.combobox_c_class.set(random_class)
+        self.highlight_class_skills()  # Resaltar las habilidades de la clase seleccionada
+
+        # Asignar aleatoriamente un trasfondo
+        background_options = list(self.background.keys())
+        random_background = random.choice(background_options)
+        self.combobox_background.set(random_background)
+        self.background_features()  # Actualizar las características del trasfondo
+
+        # Generar los atributos de forma aleatoria cumpliendo las reglas de validación
+        attributes = self.generate_valid_attributes()
+
+        # Asignar los valores generados a los contadores de atributos
+        self.strength_entry.delete(0, tk.END)
+        self.strength_entry.insert(0, str(attributes[0]))
+
+        self.dexterity_entry.delete(0, tk.END)
+        self.dexterity_entry.insert(0, str(attributes[1]))
+
+        self.constitution_entry.delete(0, tk.END)
+        self.constitution_entry.insert(0, str(attributes[2]))
+
+        self.intelligence_entry.delete(0, tk.END)
+        self.intelligence_entry.insert(0, str(attributes[3]))
+
+        self.wisdom_entry.delete(0, tk.END)
+        self.wisdom_entry.insert(0, str(attributes[4]))
+
+        self.charisma_entry.delete(0, tk.END)
+        self.charisma_entry.insert(0, str(attributes[5]))
+
+        # Seleccionar automáticamente las habilidades de la clase
+        max_skills = get_class_max_skills(random_class)
+        available_skills = list(get_class_skills(random_class))
+
+        # Primero, desmarcar todas las habilidades
+        for skill_data in self.skill_vars.values():
+            skill_data['var'].set(False)
+
+        # Marcar las habilidades permitidas hasta el máximo permitido
+        selected_skills = random.sample(available_skills, min(max_skills, len(available_skills)))
+        for skill_name in selected_skills:
+            self.skill_vars[skill_name]['var'].set(True)
+
+        # Actualizar las habilidades
+        self.on_skill_toggle()
+
+        # Actualizar las tiradas de salvación
+        self.update_saving_throws()
+
+        # Actualizar el inventario
+        self.update_inventory()
+
     def save_character(self):
         if not self.validate_attributes():
             return
@@ -662,13 +762,12 @@ class AddCharacter(ttk.Frame):
             self.selected_image_path = image_path  # Guardar la ruta para su uso posterior
 
         # Insertar nuevo personaje en la tabla characters
-        query = 'INSERT INTO characters (name, race_id, class_id, level, background_id, image_path) VALUES (?, ?, ?, ?, ?, ?)'
+        query = 'INSERT INTO characters (name, race_id, class_id, background_id, image_path) VALUES (?, ?, ?, ?, ?)'
         parametros = (
             self.entry_name.get(),
             self.combobox_race.get(),
             self.combobox_c_class.get(),
             self.combobox_background.get(),
-            self.entry_level.cget("text"),
             getattr(self, 'selected_image_path', None)
         )
 
