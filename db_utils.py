@@ -214,6 +214,3 @@ def get_saving_throws(class_name):
         saving_throws = []
     session.close()
     return saving_throws
-
-
-

@@ -3,6 +3,7 @@ from tkinter import ttk
 from add_character import AddCharacter
 from see_character import SeeCharacter
 
+
 class MainWindow:
     db_characters = 'database/characters.db'
     db_races = 'database/races.db'
@@ -19,19 +20,23 @@ class MainWindow:
         # Configuración de estilos:
         style = ttk.Style()
         style.theme_use('clam')
-        style.configure('TButton', background='#eda268', foreground='black', font=('Garamond', 13), borderwidth=1, focusthickness=3, focuscolor='none')
+        style.configure('TButton', background='#eda268', foreground='black', font=('Garamond', 13), borderwidth=1,
+                        focusthickness=3, focuscolor='none')
         style.map('TButton', background=[('active', '#da7e37')])
         style.configure('TEntry', font=('Garamond', 11), padding=3)
         style.configure('Custom.TLabelframe', background='#F4F1DE', relief="sunken")
-        style.configure('Custom.TLabelframe.Label', foreground='#3D405B', background='#F4F1DE', font=('Garamond', 20, 'bold'))
+        style.configure('Custom.TLabelframe.Label', foreground='#3D405B', background='#F4F1DE',
+                        font=('Garamond', 20, 'bold'))
         style.configure('Custom.TFrame', background='#F4F1DE', relief="flat")
         style.configure('MessageBox.TFrame', background='#F4F1DE')
 
         # Otros botones
-        style.configure('Light.TButton', background='#CCD5AE', foreground='black', font=('Garamond', 13), borderwidth=1, focusthickness=3, focuscolor='none')
+        style.configure('Light.TButton', background='#CCD5AE', foreground='black', font=('Garamond', 13), borderwidth=1,
+                        focusthickness=3, focuscolor='none')
         style.map('Light.TButton', background=[('active', '#adc178')])
 
-        style.configure('Dark.TButton', background='#E07A5F', foreground='black', font=('Garamond', 13), borderwidth=1, focusthickness=3, focuscolor='none')
+        style.configure('Dark.TButton', background='#E07A5F', foreground='black', font=('Garamond', 13), borderwidth=1,
+                        focusthickness=3, focuscolor='none')
         style.map('Dark.TButton', background=[('active', '#DB6848')])
 
         # Configurar columnas y filas en la ventana principal
@@ -60,7 +65,7 @@ class MainWindow:
         self.boton_crear.grid(row=2, column=1, padx=20, pady=(30, 10), sticky=tk.W + tk.E)
         self.boton_ver = ttk.Button(self.main_frame, text='Lista de personajes', command=self.show_see_character)
         self.boton_ver.grid(row=3, column=1, padx=20, pady=(10, 30), sticky=tk.W + tk.E)
-        self.boton_salir = ttk.Button(self.main_frame, text='Salir', command=self.window.quit, style= "Dark.TButton")
+        self.boton_salir = ttk.Button(self.main_frame, text='Salir', command=self.window.quit, style="Dark.TButton")
         self.boton_salir.grid(row=4, column=1, padx=20, pady=(10, 30), sticky=tk.W + tk.E)
 
         # Inicializar el Frame de AddCharacter pero no mostrarlo todavía
@@ -101,7 +106,6 @@ class MainWindow:
         self.see_character_frame.grid()
         self.window.geometry("950x1000")  # Establecer el tamaño exacto de la ventana para AddCharacter
         self.center_window()  # Centrar la ventana en la pantalla
-
 
     def show_main_window(self):
         self.add_character_frame.grid_remove()  # Ocultar el frame de AddCharacter

@@ -1,7 +1,6 @@
 from db import session
 from models import *
 
-
 # Datos para poblar las tablas
 attributes = [
     {"name": "Fuerza"},
@@ -204,7 +203,7 @@ categories = [
     {"name": "Documento"},
     {"name": "Vehículo"},
     {"name": "Escudo"}
-    
+
 ]
 
 items = [
@@ -250,7 +249,8 @@ items = [
      "category": "Arma"},
     {"name": "Dardo", "description": "Un pequeño proyectil utilizado para ataques a distancia.",
      "category": "Arma Simple"},
-    {"name": "Herramienta de artesano o Instrumentos Musicales", "description": "Una herramienta de trabajo artesanal o un Instrumentos Musicales.",
+    {"name": "Herramienta de artesano o Instrumentos Musicales",
+     "description": "Una herramienta de trabajo artesanal o un Instrumentos Musicales.",
      "category": "Herramienta"},
     {"name": "Libro de hechizos", "description": "Un libro que contiene conjuros y hechizos.",
      "category": "Herramienta"},
@@ -272,7 +272,8 @@ items = [
      "category": "Herramienta"},
     {"name": "Ropa de actuación", "description": "Ropa especial usada para actuaciones y espectáculos.",
      "category": "Ropa"},
-    {"name": "Carta de presentación", "description": "Una carta que te presenta como un miembro respetable de la sociedad.",
+    {"name": "Carta de presentación",
+     "description": "Una carta que te presenta como un miembro respetable de la sociedad.",
      "category": "Documento"},
     {"name": "Capa", "description": "Una capa usada para protección o como prenda de vestir.",
      "category": "Ropa"},
@@ -300,44 +301,69 @@ items = [
      "category": "Documento"},
 
     # Específicos de trasfondos
-    {"name": "Paquete de sacerdote", "description": "Un conjunto de herramientas y objetos utilizados por sacerdotes.", "category": "Paquete"},
-    {"name": "Paquete de embaucador", "description": "Herramientas y objetos utilizados para embaucar.", "category": "Paquete"},
-    {"name": "Mochila", "description": "Una mochila utilizada para llevar objetos personales.", "category": "Accesorio"},
-    {"name": "Tres instrumentos musicales", "description": "Tres instrumentos de elección utilizados por artistas.", "category": "Instrumentos Musicales"},
-    {"name": "Carro", "description": "Un vehículo terrestre utilizado para transportar cargas.", "category": "Vehículo"},
-    {"name": "Herramientas de artesano", "description": "Herramientas utilizadas por artesanos.", "category": "Herramienta"},
-    {"name": "Paquete de gremio", "description": "Un conjunto de herramientas y objetos utilizados por miembros de un gremio.", "category": "Paquete"},
-    {"name": "Kit de herbalismo", "description": "Un conjunto de herramientas utilizadas para la preparación de remedios herbales.", "category": "Herramienta"},
+    {"name": "Paquete de sacerdote", "description": "Un conjunto de herramientas y objetos utilizados por sacerdotes.",
+     "category": "Paquete"},
+    {"name": "Paquete de embaucador", "description": "Herramientas y objetos utilizados para embaucar.",
+     "category": "Paquete"},
+    {"name": "Mochila", "description": "Una mochila utilizada para llevar objetos personales.",
+     "category": "Accesorio"},
+    {"name": "Tres instrumentos musicales", "description": "Tres instrumentos de elección utilizados por artistas.",
+     "category": "Instrumentos Musicales"},
+    {"name": "Carro", "description": "Un vehículo terrestre utilizado para transportar cargas.",
+     "category": "Vehículo"},
+    {"name": "Herramientas de artesano", "description": "Herramientas utilizadas por artesanos.",
+     "category": "Herramienta"},
+    {"name": "Paquete de gremio",
+     "description": "Un conjunto de herramientas y objetos utilizados por miembros de un gremio.",
+     "category": "Paquete"},
+    {"name": "Kit de herbalismo",
+     "description": "Un conjunto de herramientas utilizadas para la preparación de remedios herbales.",
+     "category": "Herramienta"},
     {"name": "Ropa fina", "description": "Ropa de alta calidad, típicamente usada por nobles.", "category": "Ropa"},
-    {"name": "Paquete de noble", "description": "Un conjunto de herramientas y objetos utilizados por nobles.", "category": "Paquete"},
-    {"name": "Un Instrumentos Musicales", "description": "Un Instrumentos Musicales de elección.", "category": "Instrumentos Musicales"},
-    {"name": "Paquete de explorador", "description": "Un conjunto de herramientas y objetos utilizados por exploradores.", "category": "Paquete"},
-    {"name": "Paquete de erudito", "description": "Un conjunto de herramientas y objetos utilizados por eruditos.", "category": "Paquete"},
-    {"name": "Paquete de marinero", "description": "Un conjunto de herramientas y objetos utilizados por marineros.", "category": "Paquete"},
-    {"name": "Paquete de soldado", "description": "Un conjunto de herramientas y objetos utilizados por soldados.", "category": "Paquete"},
-    {"name": "Paquete de huérfano", "description": "Un conjunto de herramientas y objetos utilizados por huérfanos.", "category": "Paquete"},
-    {"name": "Vehículo de agua", "description": "Un vehículo utilizado para el transporte acuático.", "category": "Vehículo de agua"},
-    {"name": "Herramientas de ladrón", "description": "Herramientas utilizadas por ladrones para diversas actividades delictivas.", "category": "Herramienta"},
-    {"name": "Desactivación de trampas", "description": "Un conjunto de herramientas especializadas para desactivar trampas.", "category": "Herramienta"}
+    {"name": "Paquete de noble", "description": "Un conjunto de herramientas y objetos utilizados por nobles.",
+     "category": "Paquete"},
+    {"name": "Un Instrumentos Musicales", "description": "Un Instrumentos Musicales de elección.",
+     "category": "Instrumentos Musicales"},
+    {"name": "Paquete de explorador",
+     "description": "Un conjunto de herramientas y objetos utilizados por exploradores.", "category": "Paquete"},
+    {"name": "Paquete de erudito", "description": "Un conjunto de herramientas y objetos utilizados por eruditos.",
+     "category": "Paquete"},
+    {"name": "Paquete de marinero", "description": "Un conjunto de herramientas y objetos utilizados por marineros.",
+     "category": "Paquete"},
+    {"name": "Paquete de soldado", "description": "Un conjunto de herramientas y objetos utilizados por soldados.",
+     "category": "Paquete"},
+    {"name": "Paquete de huérfano", "description": "Un conjunto de herramientas y objetos utilizados por huérfanos.",
+     "category": "Paquete"},
+    {"name": "Vehículo de agua", "description": "Un vehículo utilizado para el transporte acuático.",
+     "category": "Vehículo de agua"},
+    {"name": "Herramientas de ladrón",
+     "description": "Herramientas utilizadas por ladrones para diversas actividades delictivas.",
+     "category": "Herramienta"},
+    {"name": "Desactivación de trampas",
+     "description": "Un conjunto de herramientas especializadas para desactivar trampas.", "category": "Herramienta"}
 ]
 
 armors = [
     {"name": "Armadura de cuero", "armor_class": 11, "type": "Ligera", "strength": 0, "stealth": 0, "weight": 10.0},
     {"name": "Armadura acolchada", "armor_class": 11, "type": "Ligera", "strength": 0, "stealth": -1, "weight": 8.0},
-    {"name": "Armadura de cuero tachonado", "armor_class": 12, "type": "Ligera", "strength": 0, "stealth": -1, "weight": 13.0},
+    {"name": "Armadura de cuero tachonado", "armor_class": 12, "type": "Ligera", "strength": 0, "stealth": -1,
+     "weight": 13.0},
     {"name": "Armadura de malla", "armor_class": 14, "type": "Media", "strength": 0, "stealth": -1, "weight": 40.0},
     {"name": "Armadura de escamas", "armor_class": 14, "type": "Media", "strength": 0, "stealth": -1, "weight": 45.0},
-    {"name": "Armadura de media placa", "armor_class": 15, "type": "Media", "strength": 0, "stealth": -1, "weight": 50.0},
+    {"name": "Armadura de media placa", "armor_class": 15, "type": "Media", "strength": 0, "stealth": -1,
+     "weight": 50.0},
     {"name": "Armadura de piel", "armor_class": 11, "type": "Ligera", "strength": 0, "stealth": 1, "weight": 12.0},
     {"name": "Armadura de placas", "armor_class": 18, "type": "Pesada", "strength": 15, "stealth": -1, "weight": 65.0},
     {"name": "Armadura de anillas", "armor_class": 14, "type": "Media", "strength": 0, "stealth": -1, "weight": 55.0},
     {"name": "Cota de mallas", "armor_class": 16, "type": "Media", "strength": 13, "stealth": -1, "weight": 40.0},
     {"name": "Cota de escamas", "armor_class": 14, "type": "Media", "strength": 0, "stealth": -1, "weight": 45.0},
-    {"name": "Armadura de cuero endurecido", "armor_class": 12, "type": "Ligera", "strength": 0, "stealth": 1, "weight": 14.0},
+    {"name": "Armadura de cuero endurecido", "armor_class": 12, "type": "Ligera", "strength": 0, "stealth": 1,
+     "weight": 14.0},
     {"name": "Armadura de anillas", "armor_class": 15, "type": "Media", "strength": 13, "stealth": -1, "weight": 60.0},
     {"name": "Armadura de peto", "armor_class": 14, "type": "Media", "strength": 0, "stealth": 1, "weight": 20.0},
     {"name": "Armadura de campo", "armor_class": 16, "type": "Pesada", "strength": 15, "stealth": -1, "weight": 70.0},
-    {"name": "Armadura de cuero reforzado", "armor_class": 13, "type": "Ligera", "strength": 0, "stealth": 1, "weight": 15.0}
+    {"name": "Armadura de cuero reforzado", "armor_class": 13, "type": "Ligera", "strength": 0, "stealth": 1,
+     "weight": 15.0}
 ]
 
 backgrounds = [
@@ -347,7 +373,8 @@ backgrounds = [
         "languages": ["Común", "Celestial"],
         "items": ["Símbolo sagrado", "Libro de plegarias", "5 inciensos", "Ropajes", "Paquete de sacerdote"],
         "tool_proficiencies": "",
-        "ideals": ["La tradición, las leyes y los rituales son fundamentales (Legal)", "La compasión es la mayor virtud (Bueno)"],
+        "ideals": ["La tradición, las leyes y los rituales son fundamentales (Legal)",
+                   "La compasión es la mayor virtud (Bueno)"],
         "flaws": ["Yo tiendo a juzgar a los demás muy rápido"],
         "personality_traits": ["Soy amable y respetuoso", "Siempre estoy dispuesto a ayudar a los demás"],
         "bonds": ["Dedico mi vida a la iglesia y su comunidad"]
@@ -356,11 +383,14 @@ backgrounds = [
         "name": "Charlatán",
         "skills": ["Engaño", "Juego de Manos"],
         "languages": [],
-        "items": ["Kit de disfraz", "Herramientas de falsificación", "Conjunto de disfraces", "Herramientas de falsificación", "Paquete de embaucador"],
+        "items": ["Kit de disfraz", "Herramientas de falsificación", "Conjunto de disfraces",
+                  "Herramientas de falsificación", "Paquete de embaucador"],
         "tool_proficiencies": "Kit de disfraz, Herramientas de falsificación",
-        "ideals": ["La independencia es la clave para el éxito (Caótico)", "Todo tiene un precio, y yo lo pongo (Neutral)"],
+        "ideals": ["La independencia es la clave para el éxito (Caótico)",
+                   "Todo tiene un precio, y yo lo pongo (Neutral)"],
         "flaws": ["No puedo resistir el desafío de una apuesta"],
-        "personality_traits": ["Me encanta la atención y soy un gran narrador", "Cambio de identidad como cambio de ropa"],
+        "personality_traits": ["Me encanta la atención y soy un gran narrador",
+                               "Cambio de identidad como cambio de ropa"],
         "bonds": ["Tengo un gran secreto que no puedo revelar"]
     },
     {
@@ -369,7 +399,8 @@ backgrounds = [
         "languages": [],
         "items": ["Herramientas de ladrón", "Un tipo de juego", "Pata de cabra", "Mochila", "Paquete de ladrón"],
         "tool_proficiencies": "Herramientas de ladrón, Un tipo de juego",
-        "ideals": ["La libertad es lo único que realmente importa (Caótico)", "Me importa más mi grupo que cualquier otra cosa (Neutral)"],
+        "ideals": ["La libertad es lo único que realmente importa (Caótico)",
+                   "Me importa más mi grupo que cualquier otra cosa (Neutral)"],
         "flaws": ["Haré cualquier cosa para escapar de una situación difícil, incluso traicionar a un amigo"],
         "personality_traits": ["Soy tranquilo bajo presión", "Siempre tengo un plan de escape"],
         "bonds": ["Nunca traiciono a mi grupo, no importa el precio"]
@@ -378,9 +409,11 @@ backgrounds = [
         "name": "Artista",
         "skills": ["Interpretación", "Acrobacias"],
         "languages": [],
-        "items": ["Tres instrumentos musicales", "Ropa de actuación", "Tres instrumentos musicales", "Paquete de entretenimiento"],
+        "items": ["Tres instrumentos musicales", "Ropa de actuación", "Tres instrumentos musicales",
+                  "Paquete de entretenimiento"],
         "tool_proficiencies": "Tres instrumentos musicales",
-        "ideals": ["La creatividad es la más alta forma de expresión (Caótico)", "Quiero hacer el mundo un lugar mejor con mi arte (Bueno)"],
+        "ideals": ["La creatividad es la más alta forma de expresión (Caótico)",
+                   "Quiero hacer el mundo un lugar mejor con mi arte (Bueno)"],
         "flaws": ["Soy un poco arrogante y me encanta ser el centro de atención"],
         "personality_traits": ["Siempre estoy tarareando o cantando", "Tengo un comentario para todo"],
         "bonds": ["Mi arte es mi vida y lo protegeré a toda costa"]
@@ -389,11 +422,14 @@ backgrounds = [
         "name": "Héroe del Pueblo",
         "skills": ["Manejo de Animales", "Supervivencia"],
         "languages": [],
-        "items": ["Herramientas de artesano", "Carro", "Paquete de aventurero","Un vehículo terrestre", "Herramientas de artesano"],
+        "items": ["Herramientas de artesano", "Carro", "Paquete de aventurero", "Un vehículo terrestre",
+                  "Herramientas de artesano"],
         "tool_proficiencies": "Un vehículo terrestre, Herramientas de artesano",
-        "ideals": ["La gente común merece ser tratada con dignidad y respeto (Bueno)", "No puedo mirar hacia otro lado cuando alguien está en peligro (Neutral)"],
+        "ideals": ["La gente común merece ser tratada con dignidad y respeto (Bueno)",
+                   "No puedo mirar hacia otro lado cuando alguien está en peligro (Neutral)"],
         "flaws": ["Soy demasiado confiado, lo que a veces me mete en problemas"],
-        "personality_traits": ["Trato de ser optimista en todas las situaciones", "Nunca dejo atrás a alguien que necesita ayuda"],
+        "personality_traits": ["Trato de ser optimista en todas las situaciones",
+                               "Nunca dejo atrás a alguien que necesita ayuda"],
         "bonds": ["Haré cualquier cosa para proteger a mi comunidad"]
     },
     {
@@ -402,9 +438,11 @@ backgrounds = [
         "languages": ["Común"],
         "items": ["Herramientas de artesano", "Carta de presentación", "Herramientas de artesano", "Paquete de gremio"],
         "tool_proficiencies": "Herramientas de artesano",
-        "ideals": ["El trabajo duro y la dedicación son lo que construye una comunidad (Legal)", "La estabilidad económica es la clave para una sociedad próspera (Neutral)"],
+        "ideals": ["El trabajo duro y la dedicación son lo que construye una comunidad (Legal)",
+                   "La estabilidad económica es la clave para una sociedad próspera (Neutral)"],
         "flaws": ["Tengo una aversión extrema hacia los cambios rápidos"],
-        "personality_traits": ["Soy extremadamente detallista en mi trabajo", "Valoro la honestidad por encima de todo"],
+        "personality_traits": ["Soy extremadamente detallista en mi trabajo",
+                               "Valoro la honestidad por encima de todo"],
         "bonds": ["Mi gremio es mi familia y los defenderé hasta el final"]
     },
     {
@@ -413,9 +451,11 @@ backgrounds = [
         "languages": ["Común"],
         "items": ["Kit de herbalismo", "Capa", "Kit de herbalismo", "Paquete de ermitaño"],
         "tool_proficiencies": "Kit de herbalismo",
-        "ideals": ["La soledad y la meditación son las mejores formas de encontrar la verdad (Neutral)", "Vivo en paz con la naturaleza y todos sus habitantes (Bueno)"],
+        "ideals": ["La soledad y la meditación son las mejores formas de encontrar la verdad (Neutral)",
+                   "Vivo en paz con la naturaleza y todos sus habitantes (Bueno)"],
         "flaws": ["Soy reservado y me cuesta confiar en los demás"],
-        "personality_traits": ["Prefiero estar solo que en compañía de otros", "Tengo una gran apreciación por la belleza natural"],
+        "personality_traits": ["Prefiero estar solo que en compañía de otros",
+                               "Tengo una gran apreciación por la belleza natural"],
         "bonds": ["Mi retiro espiritual es lo que me mantiene centrado"]
     },
     {
@@ -424,9 +464,11 @@ backgrounds = [
         "languages": ["Común"],
         "items": ["Un tipo de juego", "Ropa fina", "Anillo de sello", "Carta de presentación", "Paquete de noble"],
         "tool_proficiencies": "Un tipo de juego",
-        "ideals": ["El poder conlleva responsabilidad, y debo usarlo para proteger a los demás (Legal)", "La nobleza está en el servicio, no en el título (Bueno)"],
+        "ideals": ["El poder conlleva responsabilidad, y debo usarlo para proteger a los demás (Legal)",
+                   "La nobleza está en el servicio, no en el título (Bueno)"],
         "flaws": ["A menudo subestimo a aquellos que no son de mi estatus"],
-        "personality_traits": ["Soy educado y respetuoso con todos", "Me esfuerzo por mantener una apariencia impecable"],
+        "personality_traits": ["Soy educado y respetuoso con todos",
+                               "Me esfuerzo por mantener una apariencia impecable"],
         "bonds": ["Proteger el legado de mi familia es lo más importante para mí"]
     },
     {
@@ -435,9 +477,11 @@ backgrounds = [
         "languages": ["Común"],
         "items": ["Un bastón", "Un trofeo", "Paquete de aventurero"],
         "tool_proficiencies": "Un Instrumentos Musicales",
-        "ideals": ["La libertad es lo más preciado que tenemos (Caótico)", "Debemos preservar el equilibrio de la naturaleza (Neutral)"],
+        "ideals": ["La libertad es lo más preciado que tenemos (Caótico)",
+                   "Debemos preservar el equilibrio de la naturaleza (Neutral)"],
         "flaws": ["Soy desconfiado con aquellos que no conozco bien"],
-        "personality_traits": ["Soy extremadamente autosuficiente", "Prefiero la compañía de animales que la de personas"],
+        "personality_traits": ["Soy extremadamente autosuficiente",
+                               "Prefiero la compañía de animales que la de personas"],
         "bonds": ["Tengo una conexión especial con la naturaleza que me guía"]
     },
     {
@@ -446,7 +490,8 @@ backgrounds = [
         "languages": ["Común", "Élfico"],
         "items": ["Un Instrumentos Musicales", "Botella de tinta", "Pluma", "Cuchillo pequeño", "Paquete de erudito"],
         "tool_proficiencies": "",
-        "ideals": ["El conocimiento es el camino hacia la comprensión del mundo (Neutral)", "El saber no debe ser oculto, sino compartido para el bien de todos (Bueno)"],
+        "ideals": ["El conocimiento es el camino hacia la comprensión del mundo (Neutral)",
+                   "El saber no debe ser oculto, sino compartido para el bien de todos (Bueno)"],
         "flaws": ["Puedo ser arrogante en mi intelecto, menospreciando a los demás"],
         "personality_traits": ["Tengo una sed insaciable de conocimiento", "Soy meticuloso en todo lo que hago"],
         "bonds": ["Mi búsqueda de conocimiento es lo que me define"]
@@ -457,7 +502,8 @@ backgrounds = [
         "languages": [],
         "items": ["Vehículo de agua", "Palo corto", "50 pies de cuerda de cáñamo", "Paquete de marinero"],
         "tool_proficiencies": "Vehículo de agua",
-        "ideals": ["El mar es libertad, y yo soy libre en él (Caótico)", "La lealtad a mi tripulación es lo primero (Neutral)"],
+        "ideals": ["El mar es libertad, y yo soy libre en él (Caótico)",
+                   "La lealtad a mi tripulación es lo primero (Neutral)"],
         "flaws": ["Tengo una debilidad por la bebida"],
         "personality_traits": ["Tengo un gran respeto por el mar", "Siempre estoy buscando la próxima aventura"],
         "bonds": ["Haré cualquier cosa por mis compañeros marineros"]
@@ -468,7 +514,8 @@ backgrounds = [
         "languages": [],
         "items": ["Insignia de rango", "Un dado", "Paquete de soldado", "Un tipo de juego", "Vehículo terrestre"],
         "tool_proficiencies": "Un tipo de juego, Vehículo terrestre",
-        "ideals": ["Vivo y muero por mi deber y mi honor (Legal)", "La disciplina y el deber son lo que nos mantiene unidos (Neutral)"],
+        "ideals": ["Vivo y muero por mi deber y mi honor (Legal)",
+                   "La disciplina y el deber son lo que nos mantiene unidos (Neutral)"],
         "flaws": ["Tengo dificultades para dejar ir el pasado"],
         "personality_traits": ["Soy muy serio y centrado en mi deber", "Tengo una actitud de 'primero en la batalla'"],
         "bonds": ["Siempre seré leal a mi unidad militar"]
@@ -477,9 +524,11 @@ backgrounds = [
         "name": "Huérfano",
         "skills": ["Sigilo", "Juego de Manos"],
         "languages": [],
-        "items": ["Cuchillo pequeño", "Mapa", "Paquete de huérfano", "Desactivación de trampas", "Herramientas de ladrón"],
+        "items": ["Cuchillo pequeño", "Mapa", "Paquete de huérfano", "Desactivación de trampas",
+                  "Herramientas de ladrón"],
         "tool_proficiencies": "Desactivación de trampas, Herramientas de ladrón",
-        "ideals": ["La supervivencia es lo más importante, sin importar los medios (Caótico)", "Nunca confiaré en nadie excepto en mí mismo (Neutral)"],
+        "ideals": ["La supervivencia es lo más importante, sin importar los medios (Caótico)",
+                   "Nunca confiaré en nadie excepto en mí mismo (Neutral)"],
         "flaws": ["Soy extremadamente desconfiado"],
         "personality_traits": ["Siempre estoy alerta y preparado para lo peor", "Raramente muestro mis emociones"],
         "bonds": ["Tengo un profundo deseo de venganza contra aquellos que me hicieron daño"]
@@ -489,6 +538,7 @@ backgrounds = [
 
 def is_table_empty(session, model):
     return session.query(model).count() == 0
+
 
 # Poblar la base de datos si las tablas están vacías
 def populate_db():

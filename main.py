@@ -3,8 +3,6 @@ from main_window import MainWindow
 from db import init_db
 from resources.populate_db import populate_db
 
-
-
 def main():
     init_db()
     populate_db()
