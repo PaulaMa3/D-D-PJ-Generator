@@ -3,8 +3,9 @@ import numpy as np
 from PIL import Image, ImageTk
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import tkinter as tk
-from tkinter import ttk
+from tkinter import ttk, messagebox
 import sqlite3
+from edit_character import EditCharacter
 
 
 class SeeCharacter(ttk.Frame):
@@ -122,6 +123,10 @@ class SeeCharacter(ttk.Frame):
         self.label_name = ttk.Label(self.data_frame, text="", font=("Garamond", 16), style='Custom.TLabelframe.Label')
         self.label_name.grid(row=3, column=0, padx=20, pady=20, sticky="ew")
 
+        self.edit_character_button = ttk.Button(self.data_frame, text="Editar Personaje",
+                                                command=self.show_edit_character, style='TButton')
+        self.edit_character_button.grid(row=4, column=0, padx=20, pady=20, sticky="ew" )
+
         # Frame para la gráfica
         self.chart_frame = ttk.Frame(self.info_frame)
         self.chart_frame.grid(row=0, column=1, padx=(0, 20), pady=(15, 5), sticky="nsew")
@@ -129,6 +134,13 @@ class SeeCharacter(ttk.Frame):
         # Asegurarse de que el frame se expanda
         self.info_frame.columnconfigure(1, weight=1)
         self.info_frame.rowconfigure(1, weight=1)
+
+
+        # Inicializar el Frame de SeeCharacter pero no mostrarlo todavía
+        self.edit_character_frame = EditCharacter(self.parent, self.main_window)
+        self.edit_character_frame.grid(row=0, column=0, columnspan=3, pady=(5, 20), padx=20, sticky=tk.W + tk.E)
+        self.edit_character_frame.grid_propagate(True)  # Permitir que el frame crezca según su contenido
+        self.edit_character_frame.grid_remove()
 
     def db_consulta(self, consulta, parametros=()):
         with sqlite3.connect(self.db_characters) as con:
@@ -196,6 +208,11 @@ class SeeCharacter(ttk.Frame):
             ))
 
     def show_character_info(self, event):
+        self.edit_character_button = ttk.Button(self.data_frame, text="Editar Personaje",
+                                                command=self.show_edit_character, style='TButton')
+        self.edit_character_button.grid(row=4, column=0, padx=20, pady=20, sticky="ew")
+
+
         selected_items = self.tabla.selection()
 
         selected_item = selected_items[0]
@@ -344,5 +361,17 @@ class SeeCharacter(ttk.Frame):
         self.ok_message['text'] = f'Personaje {nombre} eliminado con éxito'
         self.get_character()
 
-    def edit_character(self):
-        pass
+    def show_edit_character(self):
+        selected_items = self.tabla.selection()
+        if not selected_items:
+            messagebox.showerror("Error", "Por favor selecciona un personaje para editar.")
+            return
+
+        selected_item = selected_items[0]
+        character_id = self.tabla.item(selected_item)['values'][
+            0]  # Asume que la primera columna tiene el ID del personaje
+
+        # Crea una nueva instancia del frame de edición y pásale el ID del personaje seleccionado
+        self.edit_character_frame = EditCharacter(self.parent, self.main_window,
+                                                  character_id)  # Asegúrate de pasar 'main_window'
+        self.edit_character_frame.grid()  # Muestra el frame de edición

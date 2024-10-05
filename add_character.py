@@ -56,7 +56,8 @@ class AddCharacter(ttk.Frame):
         self.save_button.pack(side="left", padx=(35, 10))
 
         # Añadir botón Volver a Inicio
-        self.back_button = ttk.Button(barra, text="Volver a Inicio", command=self.main_window.show_main_window, style="Dark.TButton")
+        self.back_button = ttk.Button(barra, text="Volver a Inicio", command=main_window.show_main_window,
+                                      style="Dark.TButton")
         self.back_button.pack(side="left", padx=(10, 0))
 
         # Añadir botón para crear personaje aleatorio
@@ -75,6 +76,11 @@ class AddCharacter(ttk.Frame):
                                            command=self.select_image)
         self.add_image_button.place(relx=0.5, rely=0.5, anchor="center")
         self.image_frame.grid_propagate(False)  # Evitar que el frame se expanda o contraiga según el contenido
+
+        # Botón para generar la imagen del personaje mediante IA
+        self.generate_image_button = ttk.Button(self.image_frame, text="Generar Imagen IA", style='Light.TButton',
+                                                command=self.generate_image_with_ai)
+        self.generate_image_button.place(relx=0.5, rely=0.8, anchor="center")
 
         self.label_name = ttk.Label(frame_ep, text="Nombre:", font=("Garamond", 16), background='#F4F1DE')
         self.label_name.grid(row=2, column=1, padx=(25, 5), pady=(25,5), sticky=tk.NSEW)
@@ -743,6 +749,53 @@ class AddCharacter(ttk.Frame):
 
         # Actualizar el inventario
         self.update_inventory()
+
+    def generate_image_with_ai(self):
+        # Datos del personaje a partir de las selecciones
+        character_data = {
+            "class": self.combobox_c_class.get(),
+            "race": self.combobox_race.get(),
+            "background": self.combobox_background.get()
+        }
+
+        # URL de la API de Together.AI y el API KEY
+        url = "https://api.together.xyz/inference"  # Ajusta la URL si es necesario
+        api_key = os.getenv("FLUX_API_KEY")
+
+        # Datos que serán enviados en el cuerpo de la solicitud
+        payload = {
+            "prompt": f"Generate a fantasy character with class {character_data['class']}, race {character_data['race']} and background {character_data['background']}",
+            "style": "fantasy"
+        }
+
+        headers = {
+            "Authorization": f"Bearer {api_key}",
+            "Content-Type": "application/json"
+        }
+
+        try:
+            # Realizar la solicitud a la API
+            response = requests.post(url, json=payload, headers=headers)
+            response.raise_for_status()  # Verificar si hubo algún error
+
+            # Obtener la imagen desde la respuesta
+            image_data = response.content
+            image = Image.open(BytesIO(image_data))
+
+            # Almacenar la imagen generada en un atributo para poder guardarla más tarde
+            self.generated_image = image
+
+            # Mostrar la imagen en el frame de la interfaz
+            photo = ImageTk.PhotoImage(image.resize((150, 150), Image.Resampling.LANCZOS))
+            self.add_image_button.place_forget()  # Ocultar el botón
+            self.img_label = tk.Label(self.image_frame, image=photo)
+            self.img_label.image = photo  # Mantener referencia a la imagen
+            self.img_label.place(relx=0.5, rely=0.5, anchor="center")
+
+            messagebox.showinfo("Éxito", "Imagen generada correctamente.")
+
+        except requests.exceptions.RequestException as e:
+            messagebox.showerror("Error", f"No se pudo generar la imagen: {str(e)}")
 
     def save_character(self):
         if not self.validate_attributes():

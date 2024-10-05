@@ -4,7 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b20083de-b22e-4895-bbe5-1093efcb95af" name="Changes" comment="See character&#10;&#10;Arreglada la imagen">
+    <list default="true" id="b20083de-b22e-4895-bbe5-1093efcb95af" name="Changes" comment="See character listo">
+      <change afterPath="$PROJECT_DIR$/.env" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/edit_character.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/add_character.py" beforeDir="false" afterPath="$PROJECT_DIR$/add_character.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/database/characters.db" beforeDir="false" afterPath="$PROJECT_DIR$/database/characters.db" afterDir="false" />
@@ -306,7 +308,14 @@
       <option name="project" value="LOCAL" />
       <updated>1728067622932</updated>
     </task>
-    <option name="localTasksCounter" value="29" />
+    <task id="LOCAL-00029" summary="See character listo">
+      <created>1728073765427</created>
+      <option name="number" value="00029" />
+      <option name="presentableId" value="LOCAL-00029" />
+      <option name="project" value="LOCAL" />
+      <updated>1728073765427</updated>
+    </task>
+    <option name="localTasksCounter" value="30" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -406,14 +415,15 @@
     <MESSAGE value="Init" />
     <MESSAGE value=".." />
     <MESSAGE value="See character&#10;&#10;Arreglada la imagen" />
-    <option name="LAST_COMMIT_MESSAGE" value="See character&#10;&#10;Arreglada la imagen" />
+    <MESSAGE value="See character listo" />
+    <option name="LAST_COMMIT_MESSAGE" value="See character listo" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/main_window.py</url>
-          <line>115</line>
+          <line>123</line>
           <option name="timeStamp" value="1" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
