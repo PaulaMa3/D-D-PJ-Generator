@@ -123,9 +123,11 @@ class SeeCharacter(ttk.Frame):
         self.label_name = ttk.Label(self.data_frame, text="", font=("Garamond", 16), style='Custom.TLabelframe.Label')
         self.label_name.grid(row=3, column=0, padx=20, pady=20, sticky="ew")
 
-        self.edit_character_button = ttk.Button(self.data_frame, text="Editar Personaje",
+        self.edit_button_frame = ttk.Frame(self.data_frame, style='Custom.TFrame')
+        self.edit_button_frame.grid(row=4, column=0, padx=20, pady=20, sticky="ew")
+        self.edit_character_button = ttk.Button(self.edit_button_frame, text="Editar Personaje",
                                                 command=self.show_edit_character, style='TButton')
-        self.edit_character_button.grid(row=4, column=0, padx=20, pady=20, sticky="ew" )
+        self.edit_character_button.grid(row=0, column=0, padx=5, pady=5, sticky="ew" )
 
         # Frame para la gráfica
         self.chart_frame = ttk.Frame(self.info_frame)
@@ -208,15 +210,15 @@ class SeeCharacter(ttk.Frame):
             ))
 
     def show_character_info(self, event):
-        self.edit_character_button = ttk.Button(self.data_frame, text="Editar Personaje",
+        self.edit_character_button = ttk.Button(self.edit_button_frame, text="Editar Personaje",
                                                 command=self.show_edit_character, style='TButton')
-        self.edit_character_button.grid(row=4, column=0, padx=20, pady=20, sticky="ew")
-
+        self.edit_character_button.grid(row=0, column=0, padx=5, pady=5, sticky="ew")
 
         selected_items = self.tabla.selection()
+        if not selected_items:
+            return
 
         selected_item = selected_items[0]
-
         character_data = self.tabla.item(selected_item)['values']
 
         name = character_data[0]
@@ -361,6 +363,7 @@ class SeeCharacter(ttk.Frame):
         self.ok_message['text'] = f'Personaje {nombre} eliminado con éxito'
         self.get_character()
 
+    # Cambios en show_edit_character en SeeCharacter.py
     def show_edit_character(self):
         selected_items = self.tabla.selection()
         if not selected_items:
@@ -368,10 +371,19 @@ class SeeCharacter(ttk.Frame):
             return
 
         selected_item = selected_items[0]
-        character_id = self.tabla.item(selected_item)['values'][
-            0]  # Asume que la primera columna tiene el ID del personaje
+        character_name = self.tabla.item(selected_item)['values'][0]
+
+        # Obtener el ID del personaje por el nombre
+        character_id = self.db_consulta('SELECT id FROM characters WHERE name = ?', (character_name,))[0][0]
 
         # Crea una nueva instancia del frame de edición y pásale el ID del personaje seleccionado
-        self.edit_character_frame = EditCharacter(self.parent, self.main_window,
-                                                  character_id)  # Asegúrate de pasar 'main_window'
+        self.edit_character_frame = EditCharacter(self.parent, self.main_window, character_id)
         self.edit_character_frame.grid()  # Muestra el frame de edición
+
+        # Asegurarse de ajustar el tamaño de la ventana para la vista de edición
+        self.main_window.window.geometry("1410x1000")  # Ajusta el tamaño de la ventana
+        self.main_window.center_window()
+
+        # Refrescar la tabla de personajes después de cerrar la ventana de edición
+        self.edit_character_frame.bind("<Destroy>", lambda event: self.get_character())
+

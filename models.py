@@ -20,12 +20,12 @@ attribute_character_association = Table('attribute_character_association', Base.
                                         Column('value', Integer))
 
 character_inventory_association = Table('character_inventory_association', Base.metadata,
-                                        Column('character.id', Integer, ForeignKey('characters.id')),
-                                        Column('inventory.id', Integer, ForeignKey('inventories.id')))
+                                        Column('character_id', Integer, ForeignKey('characters.id')),
+                                        Column('inventory_id', Integer, ForeignKey('inventories.id')))
 
 character_armor_association = Table('character_armor_association', Base.metadata,
-                                    Column('character.id', Integer, ForeignKey('characters.id')),
-                                    Column('armor.id', Integer, ForeignKey('armors.id')))
+                                    Column('character_id', Integer, ForeignKey('characters.id')),
+                                    Column('armor_id', Integer, ForeignKey('armors.id')))
 
 
 # Definición de la clase Character

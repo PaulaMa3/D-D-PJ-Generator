@@ -2,12 +2,9 @@ import random
 import os
 import tkinter as tk
 from tkinter import ttk, filedialog, messagebox
-
 from ui_elements import create_taped_label
 from db_utils import *
 
-import requests
-from io import BytesIO
 from PIL import Image, ImageTk
 
 
@@ -56,15 +53,17 @@ class AddCharacter(ttk.Frame):
         self.save_button.pack(side="left", padx=(35, 10))
 
         # Añadir botón Volver a Inicio
-        self.back_button = ttk.Button(barra, text="Volver a Inicio", command=main_window.show_main_window,
+        self.back_button = ttk.Button(barra, text="Volver", command=main_window.show_main_window,
                                       style="Dark.TButton")
         self.back_button.pack(side="left", padx=(10, 0))
 
         # Añadir botón para crear personaje aleatorio
-        self.random_character_button = ttk.Button(barra, text="Crear Personaje Aleatorio", command=self.generate_random_character, style='Light.TButton')
+        self.random_character_button = ttk.Button(barra, text="Crear Personaje Aleatorio",
+                                                  command=self.generate_random_character, style='Light.TButton')
         self.random_character_button.pack(side="right", padx=(10, 35))
 
-        frame_ep = ttk.LabelFrame(central_frame, text="Generador de fichas de personaje", labelanchor='n', style='Custom.TLabelframe')
+        frame_ep = ttk.LabelFrame(central_frame, text="Generador de fichas de personaje", labelanchor='n',
+                                  style='Custom.TLabelframe')
         frame_ep.grid(row=2, column=0, columnspan=10, pady=0, padx=(10, 10), sticky=tk.NSEW)
 
         # Crear un marco para la imagen y el botón
@@ -77,19 +76,14 @@ class AddCharacter(ttk.Frame):
         self.add_image_button.place(relx=0.5, rely=0.5, anchor="center")
         self.image_frame.grid_propagate(False)  # Evitar que el frame se expanda o contraiga según el contenido
 
-        # Botón para generar la imagen del personaje mediante IA
-        self.generate_image_button = ttk.Button(self.image_frame, text="Generar Imagen IA", style='Light.TButton',
-                                                command=self.generate_image_with_ai)
-        self.generate_image_button.place(relx=0.5, rely=0.8, anchor="center")
-
         self.label_name = ttk.Label(frame_ep, text="Nombre:", font=("Garamond", 16), background='#F4F1DE')
-        self.label_name.grid(row=2, column=1, padx=(25, 5), pady=(25,5), sticky=tk.NSEW)
+        self.label_name.grid(row=2, column=1, padx=(25, 5), pady=(25, 5), sticky=tk.NSEW)
         self.entry_name = ttk.Entry(frame_ep, font=("Garamond", 16))
-        self.entry_name.grid(row=2, column=2, padx=(5, 20), pady=(25,5), sticky=tk.NSEW)
+        self.entry_name.grid(row=2, column=2, padx=(5, 20), pady=(25, 5), sticky=tk.NSEW)
 
         self.dado_image = tk.PhotoImage(file="resources/dado.png")
         self.random_name_button = ttk.Button(frame_ep, image=self.dado_image, command=self.generate_random_name)
-        self.random_name_button.grid(row=2, column=3, padx=(0, 5), pady=(25,5))
+        self.random_name_button.grid(row=2, column=3, padx=(0, 5), pady=(25, 5))
 
         self.label_race = ttk.Label(frame_ep, text="Raza:", font=("Garamond", 16), background='#F4F1DE')
         self.label_race.grid(row=3, column=1, padx=(25, 5), pady=5, sticky=tk.NSEW)
@@ -116,10 +110,11 @@ class AddCharacter(ttk.Frame):
         self.entry_level = ttk.Label(frame_ep, text="1", font=("Garamond", 16), background='#F4F1DE')
         self.entry_level.grid(row=5, column=2, padx=(5, 20), pady=(5, 25), sticky=tk.NSEW)
 
-        self.label_proficiency_bonus = ttk.Label(frame_ep, text="Bonificador de competencia:", font=("Garamond", 16), background='#F4F1DE')
-        self.label_proficiency_bonus.grid(row=2, column=4, padx=(25, 5), pady=(25,5), sticky=tk.NSEW)
-        self.label_proficiency_bonus_info = ttk.Label(frame_ep, text="+2",  font=("Garamond", 15), background='#F4F1DE')
-        self.label_proficiency_bonus_info.grid(row=2, column=5, padx=(5, 20), pady=(25,5), sticky=tk.NSEW)
+        self.label_proficiency_bonus = ttk.Label(frame_ep, text="Bonificador de competencia:", font=("Garamond", 16),
+                                                 background='#F4F1DE')
+        self.label_proficiency_bonus.grid(row=2, column=4, padx=(25, 5), pady=(25, 5), sticky=tk.NSEW)
+        self.label_proficiency_bonus_info = ttk.Label(frame_ep, text="+2", font=("Garamond", 15), background='#F4F1DE')
+        self.label_proficiency_bonus_info.grid(row=2, column=5, padx=(5, 20), pady=(25, 5), sticky=tk.NSEW)
 
         self.speed_label = ttk.Label(frame_ep, text="Velocidad:", font=("Garamond", 16), background='#F4F1DE')
         self.speed_label.grid(row=3, column=4, padx=(25, 5), pady=5, sticky=tk.NSEW)
@@ -128,7 +123,8 @@ class AddCharacter(ttk.Frame):
 
         self.combobox_c_class.bind("<<ComboboxSelected>>", self.highlight_class_skills)
 
-        self.armor_class_label = ttk.Label(frame_ep, text="Clase de armadura:", font=("Garamond", 16), background='#F4F1DE')
+        self.armor_class_label = ttk.Label(frame_ep, text="Clase de armadura:", font=("Garamond", 16),
+                                           background='#F4F1DE')
         self.armor_class_label.grid(row=4, column=4, padx=(25, 5), pady=5, sticky=tk.NSEW)
         self.armor_class_info_label = ttk.Label(frame_ep, text="", font=("Garamond", 14), background='#F4F1DE')
         self.armor_class_info_label.grid(row=4, column=5, padx=(5, 20), pady=5, sticky=tk.NSEW)
@@ -141,13 +137,14 @@ class AddCharacter(ttk.Frame):
 
         self.combobox_race.bind("<<ComboboxSelected>>", self.update_race_bonuses)
 
-        #Idiomas
+        # Idiomas
         languages_frame = ttk.Frame(frame_ep, style='Custom.TLabelframe')
         languages_frame.grid(row=1, rowspan=5, column=9, columnspan=3, padx=(80, 5), pady=15, sticky="nsew")
 
         self.languages_label = create_taped_label(languages_frame, "Idiomas")
         self.languages_label.grid(columnspan=2, padx=(30, 30), pady=5, sticky=tk.NSEW)
-        self.languages_info_label = ttk.Label(languages_frame, text="", font=("Garamond", 14), background='#F4F1DE', wraplength=150)
+        self.languages_info_label = ttk.Label(languages_frame, text="", font=("Garamond", 14), background='#F4F1DE',
+                                              wraplength=150)
         self.languages_info_label.grid(row=1, rowspan=3, column=0, padx=(30, 30), pady=5, sticky=tk.NSEW)
 
         # Atributos
@@ -167,7 +164,7 @@ class AddCharacter(ttk.Frame):
         self.strength_entry.bind("<KeyRelease>", lambda event: self.update_skill_modifiers())
 
         self.strength_info = ttk.Label(strength, text="", font=("Garamond", 10), background='#F4F1DE')
-        self.strength_info.grid(row=1, column=1, padx=(5,0), pady=5, sticky=tk.NSEW)
+        self.strength_info.grid(row=1, column=1, padx=(5, 0), pady=5, sticky=tk.NSEW)
         self.strength_entry.bind("<KeyRelease>", self.update_saving_throws)
 
         # Destreza
@@ -183,14 +180,14 @@ class AddCharacter(ttk.Frame):
         self.dexterity_entry.bind("<KeyRelease>", lambda event: self.update_skill_modifiers())
 
         self.dexterity_info = ttk.Label(dexterity, text="", font=("Garamond", 10), background='#F4F1DE')
-        self.dexterity_info.grid(row=1, column=1, padx=(5,0), pady=5, sticky=tk.NSEW)
+        self.dexterity_info.grid(row=1, column=1, padx=(5, 0), pady=5, sticky=tk.NSEW)
         self.dexterity_entry.bind("<KeyRelease>", self.update_saving_throws)
 
         # Constitución
         constitution = ttk.Frame(attributes, style='Custom.TFrame')
         constitution.grid(row=2, column=0, padx=5, pady=5, sticky=tk.NSEW)
 
-        self.constitution_label = create_taped_label(constitution,"Constitución")
+        self.constitution_label = create_taped_label(constitution, "Constitución")
         self.constitution_label.grid(row=0, column=0, padx=5, pady=5, sticky=tk.NSEW)
 
         self.constitution_entry = ttk.Entry(constitution, font=("Garamond", 18), width=5)
@@ -199,7 +196,7 @@ class AddCharacter(ttk.Frame):
         self.constitution_entry.bind("<KeyRelease>", lambda event: self.update_skill_modifiers())
 
         self.constitution_info = ttk.Label(constitution, text="", font=("Garamond", 10), background='#F4F1DE')
-        self.constitution_info.grid(row=1, column=1, padx=(5,0), pady=5, sticky=tk.NSEW)
+        self.constitution_info.grid(row=1, column=1, padx=(5, 0), pady=5, sticky=tk.NSEW)
         self.constitution_entry.bind("<KeyRelease>", self.update_saving_throws)
 
         # Inteligencia
@@ -215,7 +212,7 @@ class AddCharacter(ttk.Frame):
         self.intelligence_entry.bind("<KeyRelease>", lambda event: self.update_skill_modifiers())
 
         self.intelligence_info = ttk.Label(intelligence, text="", font=("Garamond", 10), background='#F4F1DE')
-        self.intelligence_info.grid(row=1, column=1, padx=(5,0), pady=5, sticky=tk.NSEW)
+        self.intelligence_info.grid(row=1, column=1, padx=(5, 0), pady=5, sticky=tk.NSEW)
         self.intelligence_entry.bind("<KeyRelease>", self.update_saving_throws)
 
         # Sabiduría
@@ -264,13 +261,14 @@ class AddCharacter(ttk.Frame):
 
         # Segundo Frame
         second_frame = ttk.Frame(central_frame, style='Custom.TFrame')
-        second_frame.grid(row=6, column=3, rowspan=2, columnspan=5, padx=(15,5), pady=(5, 0), sticky="nsew")
+        second_frame.grid(row=6, column=3, rowspan=2, columnspan=5, padx=(15, 5), pady=(5, 0), sticky="nsew")
 
         # Trasfondo
         self.background = get_backgrounds()
         self.label_background = create_taped_label(second_frame, "Trasfondo")
         self.label_background.grid(row=0, column=0, padx=(25, 30), pady=5, sticky=tk.NSEW)
-        self.combobox_background = ttk.Combobox(second_frame, values=list(self.background.keys()), font=('Garamond', 15),
+        self.combobox_background = ttk.Combobox(second_frame, values=list(self.background.keys()),
+                                                font=('Garamond', 15),
                                                 state='readonly')
         self.combobox_background.grid(row=1, column=0, padx=(25, 30), pady=(5, 90), sticky=tk.NSEW)
 
@@ -316,28 +314,32 @@ class AddCharacter(ttk.Frame):
 
         self.update_saving_throws()
 
-        #Características del trasfondo
+        # Características del trasfondo
         background_features = ttk.Frame(central_frame, style='Custom.TLabelframe')
-        background_features.grid(row=6, column=8, rowspan=12, columnspan=2, padx=(15,5), pady=(5, 0), sticky="nsew" )
+        background_features.grid(row=6, column=8, rowspan=12, columnspan=2, padx=(15, 5), pady=(5, 0), sticky="nsew")
 
         self.ideal_label = create_taped_label(background_features, "Ideal")
         self.ideal_label.grid(row=0, column=0, padx=30, pady=(30, 5), sticky=tk.NSEW)
-        self.ideal_info_label = ttk.Label(background_features, text="", font=("Garamond", 12), background='#F4F1DE', wraplength=150)
+        self.ideal_info_label = ttk.Label(background_features, text="", font=("Garamond", 12), background='#F4F1DE',
+                                          wraplength=150)
         self.ideal_info_label.grid(row=1, rowspan=5, column=0, padx=30, pady=5, sticky=tk.NSEW)
 
         self.flaw_label = create_taped_label(background_features, "Defecto")
         self.flaw_label.grid(row=6, column=0, padx=30, pady=5, sticky=tk.NSEW)
-        self.flaw_info_label = ttk.Label(background_features, text="", font=("Garamond", 12), background='#F4F1DE', wraplength=150)
+        self.flaw_info_label = ttk.Label(background_features, text="", font=("Garamond", 12), background='#F4F1DE',
+                                         wraplength=150)
         self.flaw_info_label.grid(row=7, rowspan=3, column=0, padx=30, pady=5, sticky=tk.NSEW)
 
         self.traits_label = create_taped_label(background_features, "Rasgos de Personalidad")
         self.traits_label.grid(row=10, column=0, padx=30, pady=5, sticky=tk.NSEW)
-        self.traits_info_label = ttk.Label(background_features, text="", font=("Garamond", 12), background='#F4F1DE', wraplength=150)
+        self.traits_info_label = ttk.Label(background_features, text="", font=("Garamond", 12), background='#F4F1DE',
+                                           wraplength=150)
         self.traits_info_label.grid(row=11, rowspan=3, column=0, padx=30, pady=5, sticky=tk.NSEW)
 
         self.bond_label = create_taped_label(background_features, "Vínculo")
         self.bond_label.grid(row=14, column=0, padx=30, pady=5, sticky=tk.NSEW)
-        self.bond_info_label = ttk.Label(background_features, text="", font=("Garamond", 12), background='#F4F1DE', wraplength=150)
+        self.bond_info_label = ttk.Label(background_features, text="", font=("Garamond", 12), background='#F4F1DE',
+                                         wraplength=150)
         self.bond_info_label.grid(row=15, rowspan=3, column=0, padx=30, pady=(5, 30), sticky=tk.NSEW)
 
     def generate_random_name(self):
@@ -355,18 +357,19 @@ class AddCharacter(ttk.Frame):
         self.entry_name.delete(0, tk.END)  # Asegúrate de borrar cualquier texto previo
         self.entry_name.insert(0, random_name)  # Inserta el nombre generado en el Entry
 
-    def select_image(self):
-        # Abrir cuadro de diálogo para seleccionar archivo
-        file_path = filedialog.askopenfilename(filetypes=[("Image files", "*.jpg;*.png")])
+    def select_image(self, image_path=None):
+        if not image_path:  # Si no se proporciona una ruta, se abre un cuadro de diálogo
+            # Abrir cuadro de diálogo para seleccionar archivo
+            image_path = filedialog.askopenfilename(filetypes=[("Image files", "*.jpg;*.png")])
 
-        if file_path:
+        if image_path:  # Si hay una ruta de imagen (proporcionada o seleccionada)
             # Cargar imagen usando PIL
-            image = Image.open(file_path)
+            image = Image.open(image_path)
             image = image.resize((150, 150), Image.Resampling.LANCZOS)
             photo = ImageTk.PhotoImage(image)
 
             # Guardar la ruta de la imagen seleccionada
-            self.selected_image_path = file_path
+            self.selected_image_path = image_path
 
             # Reemplazar el botón con el widget de imagen
             self.add_image_button.place_forget()
@@ -432,7 +435,7 @@ class AddCharacter(ttk.Frame):
 
         self.update_languages()
 
-    def highlight_class_skills(self, event=None):
+    def highlight_class_skills(self, event=None, show_popup=True):
         selected_class = self.combobox_c_class.get()
 
         # Limpiar todas las selecciones de habilidades y resetear a estado normal
@@ -452,9 +455,11 @@ class AddCharacter(ttk.Frame):
                 skill_data['cb'].config(
                     state=tk.DISABLED)  # Desactivar los checkboxes de las habilidades no disponibles
 
-        # Mostrar un pop-up con el número de habilidades que pueden seleccionarse
-        max_skills = get_class_max_skills(selected_class)
-        messagebox.showinfo("Habilidades", f"Puedes seleccionar {max_skills} habilidades de entre las que están en negrita.")
+            # Mostrar el pop-up solo si es necesario (es decir, cuando se cree un nuevo personaje)
+        if show_popup:
+            max_skills = get_class_max_skills(selected_class)
+            messagebox.showinfo("Habilidades",
+                                f"Puedes seleccionar {max_skills} habilidades de entre las que están en negrita.")
         self.on_skill_toggle()
 
         # Ahora, actualizar el combobox de armaduras
@@ -485,7 +490,8 @@ class AddCharacter(ttk.Frame):
 
         # Mostrar los idiomas en la etiqueta correspondiente
         self.languages_info_label.config(text='\n'.join(all_languages) if all_languages else "Sin idiomas")
-        self.languages_info_label.grid(row=1, column=0, padx=(25, 30), pady=10, sticky=tk.NSEW)  # Cambia el valor de pady
+        self.languages_info_label.grid(row=1, column=0, padx=(25, 30), pady=10,
+                                       sticky=tk.NSEW)  # Cambia el valor de pady
 
     def update_saving_throws(self, event=None):
         # Obtener la clase seleccionada
@@ -750,53 +756,6 @@ class AddCharacter(ttk.Frame):
         # Actualizar el inventario
         self.update_inventory()
 
-    def generate_image_with_ai(self):
-        # Datos del personaje a partir de las selecciones
-        character_data = {
-            "class": self.combobox_c_class.get(),
-            "race": self.combobox_race.get(),
-            "background": self.combobox_background.get()
-        }
-
-        # URL de la API de Together.AI y el API KEY
-        url = "https://api.together.xyz/inference"  # Ajusta la URL si es necesario
-        api_key = os.getenv("FLUX_API_KEY")
-
-        # Datos que serán enviados en el cuerpo de la solicitud
-        payload = {
-            "prompt": f"Generate a fantasy character with class {character_data['class']}, race {character_data['race']} and background {character_data['background']}",
-            "style": "fantasy"
-        }
-
-        headers = {
-            "Authorization": f"Bearer {api_key}",
-            "Content-Type": "application/json"
-        }
-
-        try:
-            # Realizar la solicitud a la API
-            response = requests.post(url, json=payload, headers=headers)
-            response.raise_for_status()  # Verificar si hubo algún error
-
-            # Obtener la imagen desde la respuesta
-            image_data = response.content
-            image = Image.open(BytesIO(image_data))
-
-            # Almacenar la imagen generada en un atributo para poder guardarla más tarde
-            self.generated_image = image
-
-            # Mostrar la imagen en el frame de la interfaz
-            photo = ImageTk.PhotoImage(image.resize((150, 150), Image.Resampling.LANCZOS))
-            self.add_image_button.place_forget()  # Ocultar el botón
-            self.img_label = tk.Label(self.image_frame, image=photo)
-            self.img_label.image = photo  # Mantener referencia a la imagen
-            self.img_label.place(relx=0.5, rely=0.5, anchor="center")
-
-            messagebox.showinfo("Éxito", "Imagen generada correctamente.")
-
-        except requests.exceptions.RequestException as e:
-            messagebox.showerror("Error", f"No se pudo generar la imagen: {str(e)}")
-
     def save_character(self):
         if not self.validate_attributes():
             return
@@ -857,10 +816,20 @@ class AddCharacter(ttk.Frame):
 
         # Guardar las habilidades seleccionadas
         self.save_skills(character_id)
+        self.save_armor(character_id)
 
         # Mensaje de confirmación y limpieza del formulario
         messagebox.showinfo("Éxito", f'Personaje {self.entry_name.get()} añadido con éxito')
         self.clear_form()
+
+    def save_armor(self, character_id):
+        selected_armor = self.combobox_equipment.get()
+        armor_id = self.db_query('SELECT id FROM armors WHERE name = ?', (selected_armor,)).fetchone()
+
+        if armor_id:
+            armor_id = armor_id[0]
+            self.db_query('INSERT INTO character_armor_association (character_id, armor_id) VALUES (?, ?)',
+                          (character_id, armor_id))
 
     def save_attributes(self, character_id):
         attributes = [
@@ -882,18 +851,23 @@ class AddCharacter(ttk.Frame):
                 )
 
     def save_skills(self, character_id):
-        for skill_name, skill_var in self.skill_vars.items():
-            if isinstance(skill_var, tk.BooleanVar) and skill_var.get() == 1:  # Asegurarse de que el valor sea correcto
-                skill_id = self.db_query('SELECT id FROM skills WHERE name = ?', (skill_name,)).fetchone()
-                if skill_id:
-                    skill_id = skill_id[0]
-                    self.db_query(
-                        'INSERT INTO skill_character_association (skill_id, character_id, value) VALUES (?, ?, ?)',
-                        (skill_id, character_id, 1)
-                    )
+        # Eliminar las habilidades previamente asociadas al personaje para evitar duplicados
+        self.db_query('DELETE FROM skill_character_association WHERE character_id = ?', (character_id,))
+
+        # Obtener las habilidades permitidas para la clase del personaje
+        selected_class = self.combobox_c_class.get()
+        class_skills = get_class_skills(selected_class)  # Esto debe devolver las habilidades permitidas para la clase
+
+        # Guardar solo las habilidades seleccionadas que están dentro de las habilidades permitidas de la clase
+        for skill_name, skill_data in self.skill_vars.items():
+            if skill_data['var'].get() and skill_name in class_skills:  # Guardar solo las seleccionadas y permitidas
+                skill_id = self.db_query('SELECT id FROM skills WHERE name = ?', (skill_name,)).fetchone()[0]
+                self.db_query(
+                    'INSERT INTO skill_character_association (skill_id, character_id, value) VALUES (?, ?, 1)',
+                    (skill_id, character_id))
 
     def save_inventory(self, character_id):
-        items_text  = self.inventory_info_label.cget("text")
+        items_text = self.inventory_info_label.cget("text")
         items = items_text.split('\n')
         items = [item.strip() for item in items if item.strip()]
 
@@ -964,7 +938,7 @@ class AddCharacter(ttk.Frame):
         # Limpiar los idiomas mostrados
         self.languages_info_label.config(text="")
 
-        #Limpiar el dado de daño:
+        # Limpiar el dado de daño:
         self.hit_dice_info_label.config(text="")
 
         # Limpiar los campos de características del trasfondo

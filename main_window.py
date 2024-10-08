@@ -17,6 +17,18 @@ class MainWindow:
         self.window.resizable(1, 1)
         self.window.wm_iconbitmap('resources/icon.ico')
 
+        # Crear un Frame contenedor con el color de fondo
+        self.background_frame = tk.Frame(self.window, background='#F4F1DE')
+        self.background_frame.grid(row=0, column=0, sticky=tk.NSEW)  # Expandir en todas direcciones
+
+        # Asegúrate de que el frame principal se expanda correctamente
+        self.window.columnconfigure(0, weight=1)
+        self.window.rowconfigure(0, weight=1)
+
+        # Asegurarse de que los widgets internos se expandan dentro del background_frame
+        self.background_frame.columnconfigure(0, weight=1)
+        self.background_frame.rowconfigure(0, weight=1)
+
         # Configuración de estilos:
         style = ttk.Style()
         style.theme_use('clam')
@@ -88,32 +100,33 @@ class MainWindow:
         height = self.window.winfo_height()
         x = (self.window.winfo_screenwidth() // 2) - (width // 2)
         y = (self.window.winfo_screenheight() // 2) - (height // 2)
-        self.window.geometry('{}x{}+{}+{}'.format(width, height, x, y))
+        self.window.geometry(f'{width}x{height}+{x}+{y}')
 
     def show_add_character(self):
         self.main_frame.grid_remove()  # Ocultar el frame principal
         self.add_character_frame.grid()  # Mostrar el frame de AddCharacter
 
         # Establecer un tamaño fijo mayor que se ajuste a todos los elementos de AddCharacter
-        self.window.geometry("1410x1000")  # Establecer el tamaño exacto de la ventana para AddCharacter
+        self.window.geometry("1400x1000")  # Establecer el tamaño exacto de la ventana para AddCharacter
 
         self.center_window()  # Centrar la ventana en la pantalla
 
     def show_see_character(self):
         self.main_frame.grid_remove()
-        self.see_character_frame.grid_remove()  # Ocultar el frame de SeeCharacter
         self.add_character_frame.grid_remove()  # Ocultar el frame de AddCharacter
         self.see_character_frame.grid()
-        self.window.geometry("950x1000")  # Establecer el tamaño exacto de la ventana para AddCharacter
+        self.window.geometry("915x1000")  # Establecer el tamaño exacto de la ventana para AddCharacter
+        self.see_character_frame.get_character()  # Refrescar la lista de personajes con los cambios        self.main_window.window.geometry("915x1000")  # Ajustar el tamaño de la ventana si es necesario
         self.center_window()  # Centrar la ventana en la pantalla
 
     def show_edit_character(self):
-        self.see_frame.grid_remove()
-        self.edit_character_frame.grid_remove()  # Ocultar el frame de SeeCharacter
+        self.main_frame.grid_remove()  # Ocultar el frame principal
+        self.see_character_frame.grid_remove()  # Ocultar el frame de SeeCharacter
         self.add_character_frame.grid_remove()  # Ocultar el frame de AddCharacter
+
         self.edit_character_frame.grid()
-        self.window.geometry("1410x1000")  # Establecer el tamaño exacto de la ventana para AddCharacter
-        self.center_window()
+        self.window.geometry("1400x1000")  # Ajustar el tamaño de la ventana
+        self.center_window()  # Centrar la ventana
 
     def show_main_window(self):
         self.add_character_frame.grid_remove()  # Ocultar el frame de AddCharacter
