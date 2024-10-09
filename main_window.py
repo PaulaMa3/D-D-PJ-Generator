@@ -10,16 +10,18 @@ class MainWindow:
     db_classes = 'database/classes.db'
     db_skills = 'database/skills.db'
 
-    def __init__(self, root):
+    def __init__(self, root, user):
         self.window = root
+        self.user = user  # Guardar el usuario logueado
         self.window.title("Generador de Fichas de Personaje")
-        self.window.minsize(800, 600)  # Puedes ajustar este valor según sea necesario
+        self.window.minsize(800, 600)
+        self.window.pack_propagate(False)
         self.window.resizable(1, 1)
         self.window.wm_iconbitmap('resources/icon.ico')
 
         # Crear un Frame contenedor con el color de fondo
         self.background_frame = tk.Frame(self.window, background='#F4F1DE')
-        self.background_frame.grid(row=0, column=0, sticky=tk.NSEW)  # Expandir en todas direcciones
+        self.background_frame.grid(row=0, column=0, sticky=tk.NSEW)
 
         # Asegúrate de que el frame principal se expanda correctamente
         self.window.columnconfigure(0, weight=1)
@@ -64,7 +66,8 @@ class MainWindow:
         self.background_frame.rowconfigure(0, weight=1)
 
         # Creación del contenedor Frame principal utilizando ttk.LabelFrame
-        self.main_frame = ttk.LabelFrame(self.window, text=" INICIO ", labelanchor='n', style='Custom.TLabelframe')
+        self.main_frame = ttk.LabelFrame(self.background_frame, text=" INICIO ", labelanchor='n',
+                                         style='Custom.TLabelframe')
         self.main_frame.grid(row=0, column=0, columnspan=3, pady=(35, 35), padx=5, sticky=tk.NSEW)
 
         # Configurar columnas para que se expandan correctamente

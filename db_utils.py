@@ -1,8 +1,20 @@
 import sqlite3
 from sqlalchemy.orm import sessionmaker
 from models import Race, Class, Skill, Background, Category, Attribute
-from db import engine
+from db import engine, Session
 
+from models import User  # Asumiendo que tienes un modelo User definido
+
+
+def get_user_by_username(username: str):
+    session = Session()  # Crear una nueva sesión de SQLAlchemy
+    try:
+        # Consultar el usuario en la base de datos por su nombre de usuario
+        user = session.query(User).filter(User.username == username).first()
+
+        return user  # Retorna el objeto User si se encuentra, None si no
+    finally:
+        session.close()  # Cerrar la sesión después de usarla
 
 def get_races():
     Session = sessionmaker(bind=engine)
