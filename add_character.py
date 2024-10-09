@@ -795,27 +795,43 @@ class AddCharacter(ttk.Frame):
         class_id = class_id[0]
         background_id = background_id[0]
 
-        # Insertar nuevo personaje en la tabla characters usando los IDs
-        query = 'INSERT INTO characters (name, race_id, class_id, background_id, image_path) VALUES (?, ?, ?, ?, ?)'
+        # Insertar el personaje con inventory_id inicialmente en None
+        query = 'INSERT INTO characters (name, race_id, class_id, background_id, image_path, inventory_id) VALUES (?, ?, ?, ?, ?, ?)'
         parametros = (
             self.entry_name.get(),
             race_id,
             class_id,
             background_id,
-            getattr(self, 'selected_image_path', None)
+            getattr(self, 'selected_image_path', None),
+            None  # Por ahora no hay inventory_id
         )
 
         with sqlite3.connect(self.db_characters) as con:
             cursor = con.cursor()
             cursor.execute(query, parametros)
-            character_id = cursor.lastrowid
+            character_id = cursor.lastrowid  # Obtener el ID del personaje recién creado
             con.commit()
+
+        # Ahora crear el inventario para el personaje
+        inventory_name = f"Inventario de {self.entry_name.get()}"
+        cursor.execute('INSERT INTO inventories (name) VALUES (?)', (inventory_name,))
+        inventory_id = cursor.lastrowid  # Obtener el ID del inventario recién creado
+        con.commit()
+
+        # Actualizar el personaje con el inventory_id
+        cursor.execute('UPDATE characters SET inventory_id = ? WHERE id = ?', (inventory_id, character_id))
+        con.commit()
 
         # Guardar los atributos asociados
         self.save_attributes(character_id)
 
         # Guardar las habilidades seleccionadas
         self.save_skills(character_id)
+
+        # Guardar el inventario (elementos y cantidad)
+        self.save_inventory(character_id)
+
+        # Guardar la armadura seleccionada
         self.save_armor(character_id)
 
         # Mensaje de confirmación y limpieza del formulario
@@ -867,19 +883,27 @@ class AddCharacter(ttk.Frame):
                     (skill_id, character_id))
 
     def save_inventory(self, character_id):
-        items_text = self.inventory_info_label.cget("text")
-        items = items_text.split('\n')
-        items = [item.strip() for item in items if item.strip()]
+        # Obtener el inventory_id asociado al personaje desde la tabla characters
+        inventory_id = self.db_query('SELECT inventory_id FROM characters WHERE id = ?', (character_id,)).fetchone()
 
-        if items:
-            for item in items:
-                item_id = self.db_query('SELECT id FROM inventories WHERE name = ?', (item,)).fetchone()
-                if item_id:
-                    item_id = item_id[0]
-                    # Insertar la asociación en la tabla character_inventory_association
-                    self.db_query(
-                        'INSERT INTO character_inventory_association (character_id, inventory_id) VALUES (?, ?)',
-                        (character_id, item_id))
+        if inventory_id:
+            inventory_id = inventory_id[0]  # Extraer el ID del inventario
+            items_text = self.inventory_info_label.cget("text")
+            items = items_text.split('\n')
+            items = [item.strip() for item in items if item.strip()]
+
+            if items:
+                # Insertar cada ítem en la tabla item_inventory_association
+                for item in items:
+                    item_id = self.db_query('SELECT id FROM items WHERE name = ?', (item,)).fetchone()
+                    if item_id:
+                        item_id = item_id[0]
+                        self.db_query(
+                            'INSERT INTO item_inventory_association (inventory_id, item_id, quantity) VALUES (?, ?, ?)',
+                            (inventory_id, item_id, 1)  # Por defecto ponemos 1 como cantidad
+                        )
+        else:
+            messagebox.showerror("Error", "No se pudo encontrar el inventario asociado al personaje.")
 
     def clear_form(self):
         # Limpiar el campo de nombre

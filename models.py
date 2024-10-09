@@ -19,10 +19,6 @@ attribute_character_association = Table('attribute_character_association', Base.
                                         Column('character_id', Integer, ForeignKey('characters.id')),
                                         Column('value', Integer))
 
-character_inventory_association = Table('character_inventory_association', Base.metadata,
-                                        Column('character_id', Integer, ForeignKey('characters.id')),
-                                        Column('inventory_id', Integer, ForeignKey('inventories.id')))
-
 character_armor_association = Table('character_armor_association', Base.metadata,
                                     Column('character_id', Integer, ForeignKey('characters.id')),
                                     Column('armor_id', Integer, ForeignKey('armors.id')))
@@ -44,14 +40,17 @@ class Character(Base):
     skills = relationship('Skill', secondary=skill_character_association, back_populates='characters')
     attributes = relationship('Attribute', secondary=attribute_character_association, back_populates='characters')
     armors = relationship('Armor', secondary=character_armor_association, back_populates='characters')
-    inventories = relationship('Inventory', back_populates='character')
 
-    def __init__(self, name, image_path, race_id, class_id, background_id):
+    # Relación uno a uno con Inventory
+    inventory = relationship('Inventory', uselist=False, back_populates='character')
+    inventory_id = Column(Integer, ForeignKey('inventories.id'), nullable=True)
+
+    def __init__(self, name, image_path, race_id, class_id, background_id, inventory_id):
         self.name = name
         self.image_path = image_path
         self.race_id = race_id
         self.class_id = class_id
-        self.background_id = background_id
+        self.inventory_id = inventory_id
 
     def __repr__(self):
         return f"Character {self.name}: level {self.level}"
@@ -215,7 +214,8 @@ class Category(Base):
 # Tabla intermedia para Item y Inventory
 item_inventory_association = Table('item_inventory_association', Base.metadata,
                                    Column('inventory_id', Integer, ForeignKey('inventories.id')),
-                                   Column('item_id', Integer, ForeignKey('items.id')))
+                                   Column('item_id', Integer, ForeignKey('items.id')),
+                                   Column('quantity', Integer))
 
 
 # Definición de la clase Inventory
@@ -223,15 +223,12 @@ class Inventory(Base):
     __tablename__ = "inventories"
     id = Column(Integer, primary_key=True)
     name = Column(String(50), nullable=False)
-    character_id = Column(Integer, ForeignKey('characters.id'))
-    character = relationship('Character', back_populates='inventories')
+    character = relationship('Character', back_populates='inventory')
     items = relationship('Item', secondary=item_inventory_association, back_populates='inventories')
-    quantity = Column(Integer, nullable=False, default=1)
 
-    def __init__(self, name, character_id, quantity):
+    def __init__(self, name, character_id):
         self.name = name
         self.character_id = character_id
-        self.quantity = quantity
 
     def __repr__(self):
         return f"Este es el inventario de {self.character_id}"
