@@ -122,10 +122,6 @@ class AuthWindow(ttk.Frame):
         central_frame.columnconfigure(1, weight=1)
         central_frame.rowconfigure(0, weight=1)
 
-        # Título de la ventana de registro
-        self.label_title = ttk.Label(central_frame, text="Registrar Nuevo Usuario", style='Custom.TLabelframe')
-        self.label_title.grid(row=0, column=1, pady=10)
-
         # Campo de nombre de usuario
         self.label_username = ttk.Label(central_frame, text="Nombre de usuario:", font=("Garamond", 16),
                                         background='#F4F1DE')

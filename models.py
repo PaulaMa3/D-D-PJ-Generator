@@ -19,10 +19,6 @@ class User(Base):
     def __repr__(self):
         return f"User({self.username}, {self.email})"
 
-# Tablas intermedias corregidas
-language_character_association = Table('language_character_association', Base.metadata,
-                                       Column('language_id', Integer, ForeignKey('languages.id')),
-                                       Column('character_id', Integer, ForeignKey('characters.id')))
 
 skill_character_association = Table('skill_character_association', Base.metadata,
                                     Column('skill_id', Integer, ForeignKey('skills.id')),
@@ -51,7 +47,6 @@ class Character(Base):
     c_class = relationship('Class', back_populates='characters')
     background_id = Column(Integer, ForeignKey('backgrounds.id'))  # Relación con Background
     background = relationship('Background', back_populates='characters')
-    languages = relationship('Language', secondary=language_character_association, back_populates='characters')
     skills = relationship('Skill', secondary=skill_character_association, back_populates='characters')
     attributes = relationship('Attribute', secondary=attribute_character_association, back_populates='characters')
     armors = relationship('Armor', secondary=character_armor_association, back_populates='characters')
@@ -201,7 +196,6 @@ class Language(Base):
     id = Column(Integer, primary_key=True)
     name = Column(String(50), nullable=False)
     races = relationship('Race', secondary=race_language_association, back_populates='languages')
-    characters = relationship('Character', secondary=language_character_association, back_populates='languages')
     backgrounds = relationship('Background', secondary='background_language_association',
                                back_populates='languages')  # Relación con Backgrounds
 
