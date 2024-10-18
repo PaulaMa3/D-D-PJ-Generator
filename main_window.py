@@ -80,7 +80,7 @@ class MainWindow:
         self.boton_crear.grid(row=2, column=1, padx=20, pady=(30, 10), sticky=tk.W + tk.E)
         self.boton_ver = ttk.Button(self.main_frame, text='Lista de personajes', command=self.show_see_character, style='Light.TButton')
         self.boton_ver.grid(row=3, column=1, padx=20, pady=(10, 30), sticky=tk.W + tk.E)
-        self.boton_salir = ttk.Button(self.main_frame, text='Salir', command=self.window.quit, style="Dark.TButton")
+        self.boton_salir = ttk.Button(self.main_frame, text='Cerrar Sesión', command=self.show_auth_window, style="Dark.TButton")
         self.boton_salir.grid(row=4, column=1, padx=20, pady=(10, 30), sticky=tk.W + tk.E)
 
         # Inicializar el Frame de AddCharacter pero no mostrarlo todavía
@@ -118,7 +118,7 @@ class MainWindow:
         self.main_frame.grid_remove()
         self.add_character_frame.grid_remove()  # Ocultar el frame de AddCharacter
         self.see_character_frame.grid()
-        self.window.geometry("915x1000")  # Establecer el tamaño exacto de la ventana para AddCharacter
+        self.window.geometry("915x800")  # Establecer el tamaño exacto de la ventana para AddCharacter
         self.see_character_frame.get_character()  # Refrescar la lista de personajes con los cambios        self.main_window.window.geometry("915x1000")  # Ajustar el tamaño de la ventana si es necesario
         self.center_window()  # Centrar la ventana en la pantalla
 
@@ -136,6 +136,21 @@ class MainWindow:
         self.see_character_frame.grid_remove()  # Ocultar el frame de SeeCharacter
         self.main_frame.grid()  # Mostrar el frame principal
         self.adjust_window_size()  # Ajustar el tamaño de la ventana
+
+    def show_auth_window(self):
+        # Eliminar los frames de AddCharacter y SeeCharacter si están visibles
+        self.add_character_frame.grid_remove()
+        self.see_character_frame.grid_remove()
+
+        # Mostrar la ventana de inicio de sesión
+        self.window.destroy()  # Cierra la ventana principal
+
+        # Importar y mostrar la ventana de autenticación
+        from auth_window import AuthWindow
+        root = tk.Tk()
+        auth_window = AuthWindow(root, None)
+        auth_window.grid(row=0, column=0, sticky=tk.NSEW)
+        root.mainloop()  # Mantener la ventana de autenticación activa
 
     def adjust_window_size(self):
         self.window.update_idletasks()  # Actualizar el layout

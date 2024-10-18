@@ -53,25 +53,23 @@ class EditCharacter(AddCharacter):
             self.combobox_background.set(background_name)
             self.background_features()
 
-            # Cargar la imagen
             if character_data[4]:
-                image_path = character_data[4]
-                self.select_image(image_path)  # Cargar la imagen desde la ruta
+                self.select_image(character_data[4])  # Cargar la imagen desde la ruta
 
-            # Cargar los atributos del personaje
+                # Mostrar automáticamente el botón de "Cambiar Imagen"
+                if hasattr(self, 'change_image_button'):
+                    self.change_image_button.destroy()  # Asegúrate de que no haya duplicados
+                self.change_image_button = ttk.Button(self.frame_ep, text="Cambiar Imagen", style='Light.TButton',
+                                                      command=self.select_image)
+                self.change_image_button.grid(row=5, column=0, padx=5, pady=5, sticky="ew")  # Posicionar debajo de la imagen
+
+                # Cargar atributos, habilidades y otros detalles
             self.load_character_attributes()
-
-            # Cargar las habilidades seleccionadas del personaje
             self.load_character_skills()
-
-            # Cargar la armadura asociada al personaje
             self.load_character_armor()
 
-            # Actualiza la velocidad al cargar el personaje
+            # Actualiza la velocidad y otras bonificaciones
             self.update_race_bonuses()
-
-        # Asegurarse de que la ventana se ajuste al contenido cargado
-        self.update_idletasks()
 
     def update_race_bonuses(self, event=None):
         selected_race = self.combobox_race.get()

@@ -106,39 +106,7 @@ class SeeCharacter(ttk.Frame):
         self.central_frame.columnconfigure(0, weight=1)
         self.central_frame.rowconfigure(2, weight=1)
 
-        # Crear un frame debajo de la tabla para mostrar la información del personaje seleccionado
-        self.info_frame = ttk.Frame(self.central_frame, style='Custom.TFrame')
-        self.info_frame.grid(row=4, column=0, columnspan=3, padx=10, pady=10, sticky="nsew")
-        self.info_frame.columnconfigure(0, weight=1)
-        self.info_frame.rowconfigure(0, weight=1)
-
-        self.data_frame = ttk.Frame(self.info_frame, style='Custom.TFrame')
-        self.data_frame.grid(row=0, column=0, padx=10, pady=10, sticky="nw")
-
-        # Añadir un canvas para la imagen
-        self.canvas = tk.Canvas(self.data_frame, width=150, height=150)
-        self.canvas.grid(row=0, column=0, rowspan=3, padx=20, pady=20, sticky="nw")
-
-        # Añadir labels para mostrar el nombre y otros detalles
-        self.label_name = ttk.Label(self.data_frame, text="", font=("Garamond", 16), style='Custom.TLabelframe.Label')
-        self.label_name.grid(row=3, column=0, padx=20, pady=20, sticky="ew")
-
-        self.edit_button_frame = ttk.Frame(self.data_frame, style='Custom.TFrame')
-        self.edit_button_frame.grid(row=4, column=0, padx=20, pady=20, sticky="ew")
-        self.edit_character_button = ttk.Button(self.edit_button_frame, text="Editar Personaje",
-                                                command=self.show_edit_character, style='TButton')
-        self.edit_character_button.grid(row=0, column=0, padx=5, pady=5, sticky="ew" )
-
-        # Frame para la gráfica
-        self.chart_frame = ttk.Frame(self.info_frame)
-        self.chart_frame.grid(row=0, column=1, padx=(0, 20), pady=(15, 5), sticky="nsew")
-
-        # Asegurarse de que el frame se expanda
-        self.info_frame.columnconfigure(1, weight=1)
-        self.info_frame.rowconfigure(1, weight=1)
-
-
-        # Inicializar el Frame de SeeCharacter pero no mostrarlo todavía
+        # Inicializar el Frame de EditCharacter pero no mostrarlo todavía
         self.edit_character_frame = EditCharacter(self.parent, self.main_window)
         self.edit_character_frame.grid(row=0, column=0, columnspan=3, pady=(5, 20), padx=20, sticky=tk.W + tk.E)
         self.edit_character_frame.grid_propagate(True)  # Permitir que el frame crezca según su contenido
@@ -210,6 +178,36 @@ class SeeCharacter(ttk.Frame):
             ))
 
     def show_character_info(self, event):
+        # Crear un frame debajo de la tabla para mostrar la información del personaje seleccionado
+        self.info_frame = ttk.Frame(self.central_frame, style='Custom.TFrame')
+        self.info_frame.grid(row=4, column=0, columnspan=3, padx=10, pady=10, sticky="nsew")
+        self.info_frame.columnconfigure(0, weight=1)
+        self.info_frame.rowconfigure(0, weight=1)
+
+        self.data_frame = ttk.Frame(self.info_frame, style='Custom.TFrame')
+        self.data_frame.grid(row=0, column=0, padx=10, pady=10, sticky="nw")
+
+        # Añadir un canvas para la imagen
+        self.canvas = tk.Canvas(self.data_frame, width=150, height=150)
+        self.canvas.grid(row=0, column=0, rowspan=3, padx=20, pady=20, sticky="nw")
+
+        # Añadir labels para mostrar el nombre y otros detalles
+        self.label_name = ttk.Label(self.data_frame, text="", font=("Garamond", 16), style='Custom.TLabelframe.Label')
+        self.label_name.grid(row=3, column=0, padx=20, pady=20, sticky="ew")
+
+        self.edit_button_frame = ttk.Frame(self.data_frame, style='Custom.TFrame')
+        self.edit_button_frame.grid(row=4, column=0, padx=20, pady=20, sticky="ew")
+        self.edit_character_button = ttk.Button(self.edit_button_frame, text="Editar Personaje",
+                                                command=self.show_edit_character, style='TButton')
+        self.edit_character_button.grid(row=0, column=0, padx=5, pady=5, sticky="ew")
+
+        # Frame para la gráfica
+        self.chart_frame = ttk.Frame(self.info_frame)
+        self.chart_frame.grid(row=0, column=1, padx=(0, 20), pady=(15, 5), sticky="nsew")
+
+        # Asegurarse de que el frame se expanda
+        self.info_frame.columnconfigure(1, weight=1)
+        self.info_frame.rowconfigure(1, weight=1)
         self.edit_character_button = ttk.Button(self.edit_button_frame, text="Editar Personaje",
                                                 command=self.show_edit_character, style='TButton')
         self.edit_character_button.grid(row=0, column=0, padx=5, pady=5, sticky="ew")
@@ -322,9 +320,11 @@ class SeeCharacter(ttk.Frame):
                         LEFT JOIN attribute_character_association AS attr_int ON characters.id = attr_int.character_id AND attr_int.attribute_id = (SELECT id FROM attributes WHERE name = 'Inteligencia')
                         LEFT JOIN attribute_character_association AS attr_wis ON characters.id = attr_wis.character_id AND attr_wis.attribute_id = (SELECT id FROM attributes WHERE name = 'Sabiduría')
                         LEFT JOIN attribute_character_association AS attr_cha ON characters.id = attr_cha.character_id AND attr_cha.attribute_id = (SELECT id FROM attributes WHERE name = 'Carisma')
-                        WHERE characters.name LIKE ?
+                        WHERE characters.name LIKE ? OR races.name LIKE ? OR classes.name LIKE ? OR backgrounds.name LIKE ?
                         ORDER BY characters.name DESC'''
-            registros_db = self.db_consulta(query, ('%' + search_term + '%',))
+            search_term_like = f'%{search_term}%'  # Añadir comodines para la búsqueda parcial
+            registros_db = self.db_consulta(query,
+                                            (search_term_like, search_term_like, search_term_like, search_term_like))
         else:
             query = '''SELECT characters.name, races.name AS race_name, classes.name AS class_name, backgrounds.name AS background_name, 
                         COALESCE(attr_str.value, 0) AS strength, COALESCE(attr_dex.value, 0) AS dexterity, COALESCE(attr_con.value, 0) AS constitution, 
@@ -361,6 +361,10 @@ class SeeCharacter(ttk.Frame):
         query = 'DELETE FROM characters WHERE name = ?'
         self.db_consulta(query, (nombre,))
         self.ok_message['text'] = f'Personaje {nombre} eliminado con éxito'
+
+        # Mostrar el pop-up de confirmación
+        messagebox.showinfo("Eliminación exitosa", f"Personaje {nombre} eliminado con éxito")
+
         self.get_character()
 
     # Cambios en show_edit_character en SeeCharacter.py

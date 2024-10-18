@@ -62,12 +62,12 @@ class AddCharacter(ttk.Frame):
                                                   command=self.generate_random_character, style='Light.TButton')
         self.random_character_button.pack(side="right", padx=(10, 35))
 
-        frame_ep = ttk.LabelFrame(central_frame, text="Generador de fichas de personaje", labelanchor='n',
+        self.frame_ep = ttk.LabelFrame(central_frame, text="Generador de fichas de personaje", labelanchor='n',
                                   style='Custom.TLabelframe')
-        frame_ep.grid(row=2, column=0, columnspan=10, pady=0, padx=(10, 10), sticky=tk.NSEW)
+        self.frame_ep.grid(row=2, column=0, columnspan=10, pady=0, padx=(10, 10), sticky=tk.NSEW)
 
         # Crear un marco para la imagen y el botón
-        self.image_frame = tk.Frame(frame_ep, width=150, height=150, bg="gray")
+        self.image_frame = tk.Frame(self.frame_ep, width=150, height=150, bg="gray")
         self.image_frame.grid(row=2, column=0, rowspan=4, padx=15, pady=15, sticky="nw")
         self.image_frame.grid_propagate(False)  # Evitar que el frame se expanda o contraiga según el contenido
 
@@ -76,69 +76,69 @@ class AddCharacter(ttk.Frame):
         self.add_image_button.place(relx=0.5, rely=0.5, anchor="center")
         self.image_frame.grid_propagate(False)  # Evitar que el frame se expanda o contraiga según el contenido
 
-        self.label_name = ttk.Label(frame_ep, text="Nombre:", font=("Garamond", 16), background='#F4F1DE')
+        self.label_name = ttk.Label(self.frame_ep, text="Nombre:", font=("Garamond", 16), background='#F4F1DE')
         self.label_name.grid(row=2, column=1, padx=(25, 5), pady=(25, 5), sticky=tk.NSEW)
-        self.entry_name = ttk.Entry(frame_ep, font=("Garamond", 16))
+        self.entry_name = ttk.Entry(self.frame_ep, font=("Garamond", 16))
         self.entry_name.grid(row=2, column=2, padx=(5, 20), pady=(25, 5), sticky=tk.NSEW)
 
         self.dado_image = tk.PhotoImage(file="resources/dado.png")
-        self.random_name_button = ttk.Button(frame_ep, image=self.dado_image, command=self.generate_random_name)
+        self.random_name_button = ttk.Button(self.frame_ep, image=self.dado_image, command=self.generate_random_name)
         self.random_name_button.grid(row=2, column=3, padx=(0, 5), pady=(25, 5))
 
-        self.label_race = ttk.Label(frame_ep, text="Raza:", font=("Garamond", 16), background='#F4F1DE')
+        self.label_race = ttk.Label(self.frame_ep, text="Raza:", font=("Garamond", 16), background='#F4F1DE')
         self.label_race.grid(row=3, column=1, padx=(25, 5), pady=5, sticky=tk.NSEW)
 
         # Obtener detalles de las razas
         self.race_bonuses = get_races()
 
-        self.combobox_race = ttk.Combobox(frame_ep, values=list(self.race_bonuses.keys()), font=('Garamond', 15),
+        self.combobox_race = ttk.Combobox(self.frame_ep, values=list(self.race_bonuses.keys()), font=('Garamond', 15),
                                           state='readonly')
         self.combobox_race.grid(row=3, column=2, padx=(5, 20), pady=5, sticky=tk.NSEW)
 
         # Configurar combobox_race con el comando para actualizar bonificaciones
         self.combobox_race.bind("<<ComboboxSelected>>", self.update_race_bonuses)
 
-        self.label_class = ttk.Label(frame_ep, text="Clase:", font=("Garamond", 16), background='#F4F1DE')
+        self.label_class = ttk.Label(self.frame_ep, text="Clase:", font=("Garamond", 16), background='#F4F1DE')
         self.label_class.grid(row=4, column=1, padx=(25, 5), pady=5, sticky=tk.NSEW)
-        self.combobox_c_class = ttk.Combobox(frame_ep, values=list(get_classes().keys()), font=('Garamond', 15),
+        self.combobox_c_class = ttk.Combobox(self.frame_ep, values=list(get_classes().keys()), font=('Garamond', 15),
                                              state='readonly')
         self.combobox_c_class.grid(row=4, column=2, padx=(5, 20), pady=5, sticky=tk.NSEW)
         self.combobox_c_class.bind("<<ComboboxSelected>>", self.update_inventory)
 
-        self.label_level = ttk.Label(frame_ep, text="Nivel:", font=("Garamond", 16), background='#F4F1DE')
+        self.label_level = ttk.Label(self.frame_ep, text="Nivel:", font=("Garamond", 16), background='#F4F1DE')
         self.label_level.grid(row=5, column=1, padx=(25, 5), pady=(5, 25), sticky=tk.NSEW)
-        self.entry_level = ttk.Label(frame_ep, text="1", font=("Garamond", 16), background='#F4F1DE')
+        self.entry_level = ttk.Label(self.frame_ep, text="1", font=("Garamond", 16), background='#F4F1DE')
         self.entry_level.grid(row=5, column=2, padx=(5, 20), pady=(5, 25), sticky=tk.NSEW)
 
-        self.label_proficiency_bonus = ttk.Label(frame_ep, text="Bonificador de competencia:", font=("Garamond", 16),
+        self.label_proficiency_bonus = ttk.Label(self.frame_ep, text="Bonificador de competencia:", font=("Garamond", 16),
                                                  background='#F4F1DE')
         self.label_proficiency_bonus.grid(row=2, column=4, padx=(25, 5), pady=(25, 5), sticky=tk.NSEW)
-        self.label_proficiency_bonus_info = ttk.Label(frame_ep, text="+2", font=("Garamond", 15), background='#F4F1DE')
+        self.label_proficiency_bonus_info = ttk.Label(self.frame_ep, text="+2", font=("Garamond", 15), background='#F4F1DE')
         self.label_proficiency_bonus_info.grid(row=2, column=5, padx=(5, 20), pady=(25, 5), sticky=tk.NSEW)
 
-        self.speed_label = ttk.Label(frame_ep, text="Velocidad:", font=("Garamond", 16), background='#F4F1DE')
+        self.speed_label = ttk.Label(self.frame_ep, text="Velocidad:", font=("Garamond", 16), background='#F4F1DE')
         self.speed_label.grid(row=3, column=4, padx=(25, 5), pady=5, sticky=tk.NSEW)
-        self.speed_info_label = ttk.Label(frame_ep, text="", font=("Garamond", 14), background='#F4F1DE')
+        self.speed_info_label = ttk.Label(self.frame_ep, text="", font=("Garamond", 14), background='#F4F1DE')
         self.speed_info_label.grid(row=3, column=5, padx=(5, 20), pady=5, sticky=tk.NSEW)
 
         self.combobox_c_class.bind("<<ComboboxSelected>>", self.highlight_class_skills)
 
-        self.armor_class_label = ttk.Label(frame_ep, text="Clase de armadura:", font=("Garamond", 16),
+        self.armor_class_label = ttk.Label(self.frame_ep, text="Clase de armadura:", font=("Garamond", 16),
                                            background='#F4F1DE')
         self.armor_class_label.grid(row=4, column=4, padx=(25, 5), pady=5, sticky=tk.NSEW)
-        self.armor_class_info_label = ttk.Label(frame_ep, text="", font=("Garamond", 14), background='#F4F1DE')
+        self.armor_class_info_label = ttk.Label(self.frame_ep, text="", font=("Garamond", 14), background='#F4F1DE')
         self.armor_class_info_label.grid(row=4, column=5, padx=(5, 20), pady=5, sticky=tk.NSEW)
 
         # Dado de daño
-        self.hit_dice_label = ttk.Label(frame_ep, text="Dado de daño:", font=("Garamond", 16), background='#F4F1DE')
+        self.hit_dice_label = ttk.Label(self.frame_ep, text="Dado de daño:", font=("Garamond", 16), background='#F4F1DE')
         self.hit_dice_label.grid(row=5, column=4, padx=(25, 5), pady=(5, 25), sticky=tk.NSEW)
-        self.hit_dice_info_label = ttk.Label(frame_ep, text="", font=("Garamond", 14), background='#F4F1DE')
+        self.hit_dice_info_label = ttk.Label(self.frame_ep, text="", font=("Garamond", 14), background='#F4F1DE')
         self.hit_dice_info_label.grid(row=5, column=5, padx=(5, 20), pady=(5, 25), sticky=tk.NSEW)
 
         self.combobox_race.bind("<<ComboboxSelected>>", self.update_race_bonuses)
 
         # Idiomas
-        languages_frame = ttk.Frame(frame_ep, style='Custom.TLabelframe')
+        languages_frame = ttk.Frame(self.frame_ep, style='Custom.TLabelframe')
         languages_frame.grid(row=1, rowspan=5, column=9, columnspan=3, padx=(80, 5), pady=15, sticky="nsew")
 
         self.languages_label = create_taped_label(languages_frame, "Idiomas")
@@ -359,10 +359,9 @@ class AddCharacter(ttk.Frame):
 
     def select_image(self, image_path=None):
         if not image_path:  # Si no se proporciona una ruta, se abre un cuadro de diálogo
-            # Abrir cuadro de diálogo para seleccionar archivo
             image_path = filedialog.askopenfilename(filetypes=[("Image files", "*.jpg;*.png")])
 
-        if image_path:  # Si hay una ruta de imagen (proporcionada o seleccionada)
+        if image_path:
             # Cargar imagen usando PIL
             image = Image.open(image_path)
             image = image.resize((150, 150), Image.Resampling.LANCZOS)
@@ -371,11 +370,31 @@ class AddCharacter(ttk.Frame):
             # Guardar la ruta de la imagen seleccionada
             self.selected_image_path = image_path
 
-            # Reemplazar el botón con el widget de imagen
-            self.add_image_button.place_forget()
+            # Oculta el botón "Agregar Imagen" una vez se ha seleccionado una imagen
+            if hasattr(self, 'add_image_button'):
+                self.add_image_button.place_forget()  # Asegura que el botón se oculta tras seleccionar la imagen.
+
+            # Mostrar la imagen seleccionada
             self.img_label = tk.Label(self.image_frame, image=photo)
-            self.img_label.image = photo  # Mantener una referencia a la imagen para evitar que se elimine
+            self.img_label.image = photo  # Mantener referencia a la imagen
             self.img_label.place(relx=0.5, rely=0.5, anchor="center")
+
+            # Si ya existe el botón de "Cambiar Imagen", lo destruye
+            if hasattr(self, 'change_image_button'):
+                self.change_image_button.destroy()
+
+            # Crear el botón "Cambiar Imagen"
+            self.create_change_image_button()
+
+    def create_change_image_button(self):
+        # Si el botón ya existe, no es necesario recrearlo
+        if hasattr(self, 'change_image_button'):
+            return
+
+        # Crear el botón "Cambiar Imagen"
+        self.change_image_button = ttk.Button(self.frame_ep, text="Cambiar Imagen", style='Light.TButton',
+                                              command=self.select_image)
+        self.change_image_button.grid(row=5, column=0, padx=5, pady=5, sticky="ew")
 
     def db_query(self, consulta, parametros=()):
         with sqlite3.connect(self.db_characters) as con:
@@ -938,10 +957,19 @@ class AddCharacter(ttk.Frame):
 
         # Limpiar la imagen seleccionada
         if hasattr(self, 'img_label'):
+            self.image_path = None
             self.img_label.destroy()
-        self.selected_image_path = None
-        self.add_image_button.place(relx=0.5, rely=0.5,
-                                    anchor="center")  # Mostrar el botón de agregar imagen nuevamente
+            self.change_image_button.destroy()
+            del self.img_label  # Asegúrate de eliminar cualquier referencia a la imagen anterior
+
+        # Mostrar el botón "Agregar Imagen" nuevamente
+        if hasattr(self, 'add_image_button'):
+            self.add_image_button.place(relx=0.5, rely=0.5, anchor="center")  # Restaurar visibilidad del botón.
+        else:
+            # Si por alguna razón el botón no existe, recrearlo
+            self.add_image_button = ttk.Button(self.image_frame, text="Agregar Imagen", style='Light.TButton',
+                                               command=self.select_image)
+            self.add_image_button.place(relx=0.5, rely=0.5, anchor="center")
 
         # Limpiar las habilidades seleccionadas y restablecer los textos y el estado de los Checkbuttons
         for skill_name, skill_data in self.skill_vars.items():
